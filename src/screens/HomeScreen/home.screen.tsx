@@ -8,12 +8,7 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Geolocation from '@react-native-community/geolocation';
-import MapView, {Marker} from 'react-native-maps';
-import axios from 'axios';
 
 const checkLocationPermission = async () => {
   try {
@@ -50,68 +45,34 @@ const requestLocationPermission = async () => {
 };
 
 const HomeScreen = () => {
-  const [hasLocationPermission, setHasLocationPermission] = useState(false);
-  const navigation = useNavigation();
-  const [initialPosition, setInitialPosition] = useState<{
-    latitude: number;
-    longitude: number;
-    latitudeDelta: number;
-    longitudeDelta: number;
-  } | null>(null);
-  useEffect(() => {
-    const checkPermission = async () => {
-      const permission = await checkLocationPermission();
-      setHasLocationPermission(permission);
-    };
-    checkPermission();
-  }, []);
-  useEffect(() => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position.coords;
-        setInitialPosition({
-          latitude,
-          longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        });
-      },
-      error => Alert.alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-    );
-  }, []);
+  const imageUri = 'https://via.placeholder.com/150';
+  const title = 'Title';
+  const description = 'Description';
+  const price = 10;
+  
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
-        {hasLocationPermission ? (
-          <Text>Location permission granted</Text>
-        ) : (
-          <TouchableOpacity onPress={requestLocationPermission}>
-            <Image
-              source={require('../../images/location-on.png')}
-              style={{width: 30, height: 30}}
-            />
-          </TouchableOpacity>
-        )}
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            borderBottomWidth: 1,
+            borderColor: '#ddd',
+            paddingVertical: 16,
+          }}>
+          <Image
+            source={{uri: imageUri}}
+            style={{width: 80, height: 80, borderRadius: 5, marginRight: 16}}
+          />
+          <View style={{flex: 1}}>
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>{title}</Text>
+            <Text style={{fontSize: 14, color: '#999'}}>{description}</Text>
+            <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 5}}>
+              ${price}
+            </Text>
+          </View>
+        </View>
       </View>
-      {initialPosition && (
-        <MapView style={styles.map} initialRegion={initialPosition}>
-          <Marker coordinate={initialPosition} />
-        </MapView>
-      )}
-      <Button
-        title="Click"
-        onPress={async () => {
-          console.log('Backend response coming');
-          try {
-            const response = await axios.post('http://localhost:3000/click');
-            console.log(response.data);
-          } catch (error) {
-            console.error(error);
-          }
-        }}
-      />
-    </View>
   );
 };
 
