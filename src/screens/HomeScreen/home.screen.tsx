@@ -10,40 +10,6 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const checkLocationPermission = async () => {
-  try {
-    const hasPermission = await AsyncStorage.getItem('locationPermission');
-    return hasPermission === 'granted';
-  } catch (error) {
-    console.error('Error fetching location permission:', error);
-    return false;
-  }
-};
-const requestLocationPermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Location Permission',
-        message: 'Your app needs location access to provide features.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('You can use location');
-      await AsyncStorage.setItem('locationPermission', 'granted');
-    } else {
-      console.log('Location permission denied');
-      await AsyncStorage.setItem('locationPermission', 'denied');
-    }
-  } catch (error) {
-    console.error('Error requesting location permission:', error);
-  }
-};
-
 const HomeScreen = () => {
   const imageUri = 'https://via.placeholder.com/150';
   const title = 'Title';
