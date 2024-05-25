@@ -44,11 +44,6 @@ const HomeScreen = ({navigation}) => {
     const description = 'Description';
     const price = 10;
 
-    const Placeholder = () => (
-        <View style={styles.placeholder}>
-            <Text>Loading...</Text>
-        </View>
-    );
   return (
 
     <ScrollView style={styles.container}
@@ -59,7 +54,6 @@ const HomeScreen = ({navigation}) => {
                     />
                 }
     >
-        {loaded ? (
         <Animated.View style={{ transform: [{ translateX: animation }] }}>
             <TouchableOpacity
                 testID="Pizza"
@@ -88,9 +82,6 @@ const HomeScreen = ({navigation}) => {
             </View>
         </TouchableOpacity>
         </Animated.View>
-        ) : (
-            <Placeholder />
-        )}
       </ScrollView>
 
   );
