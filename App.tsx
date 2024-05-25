@@ -41,6 +41,7 @@ const App = () => {
                     options={{
                         headerShown: false,
                         headerTitleAlign: 'center',
+                        headerStyle: { backgroundColor: 'grey' },
                     }}
                 />
                 <Stack.Screen
@@ -48,6 +49,7 @@ const App = () => {
                     component={cartScreen}
                     options={{
                         headerTitleAlign: 'center',
+                        headerStyle: { backgroundColor: 'black' },
                     }}
                 />
                 <Stack.Screen

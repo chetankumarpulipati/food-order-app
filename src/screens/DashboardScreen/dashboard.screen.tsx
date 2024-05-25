@@ -25,6 +25,7 @@ const DashboardScreen = () => {
                                     style={{width: size, height: size, tintColor: color}}
                                 />
                             ),
+                            headerStyle: { backgroundColor: 'grey' },
                         }}
             />
             <Tab.Screen name="Cart" component={CartScreen}
@@ -35,6 +36,7 @@ const DashboardScreen = () => {
                                     style={{width: size, height: size, tintColor: color}}
                                 />
                             ),
+                            headerStyle: { backgroundColor: 'grey' },
                         }}/>
             <Tab.Screen name="Profile" component={ProfileScreen}
                         options={{
@@ -44,6 +46,7 @@ const DashboardScreen = () => {
                                     style={{width: size, height: size, tintColor: color}}
                                 />
                             ),
+                            headerStyle: { backgroundColor: 'grey' },
                         }}/>
         </Tab.Navigator>
     );

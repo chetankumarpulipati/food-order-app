@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';    
+import {View, Text, StyleSheet} from 'react-native';
 
 const CartScreen = () => {
   return (
@@ -7,9 +7,7 @@ const CartScreen = () => {
       <Text>Cart Screen</Text>
     </View>
   );
-};  
-
-export default CartScreen;
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -17,4 +15,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});         
+});
+
+export default CartScreen;
