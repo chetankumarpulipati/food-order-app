@@ -9,7 +9,7 @@ import QuantityScreen from './src/screens/QuantityScreen';
 import RestaurantScreen from './src/screens/RestaurantScreen';
 import DashboardScreen from './src/screens/DashboardScreen/dashboard.screen';
 import { RouteProp } from '@react-navigation/native';
-import { LogBox } from 'react-native';
+import {Image, LogBox} from 'react-native';
 
 
 type RootStackParamList = {
@@ -39,17 +39,21 @@ const App = () => {
                     name="Home"
                     component={DashboardScreen}
                     options={{
-                        headerShown: false,
+                        headerTitle: () => (
+                            <Image
+                                source={require('./android/app/src/main/res/mipmap-mdpi/ic_launcher.png')}
+                                style={{ width: 50, height: 50, borderRadius: 5}}
+                            />
+                        ),
                         headerTitleAlign: 'center',
-                        headerStyle: { backgroundColor: 'grey' },
+                        headerStyle: { backgroundColor: 'grey', height: 80},
                     }}
                 />
                 <Stack.Screen
                     name="cart"
                     component={cartScreen}
                     options={{
-                        headerTitleAlign: 'center',
-                        headerStyle: { backgroundColor: 'black' },
+                        headerShown: false, // Hide the header
                     }}
                 />
                 <Stack.Screen
