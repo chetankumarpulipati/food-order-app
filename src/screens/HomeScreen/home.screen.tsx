@@ -15,15 +15,48 @@ import {
     Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {TouchableOpacity} from "react-native-gesture-handler";
+import {TouchableOpacity, TouchableHighlight} from "react-native-gesture-handler";
 import { Easing } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
-
+const pizzaImage = require('../../assets/images/pizza.jpg');
+const pastaImage = require('../../assets/images/pasta.jpg');
+const saladImage = require('../../assets/images/salad.jpg');
+const sushiImage = require('../../assets/images/sushi.jpg');
+const sandwichImage = require('../../assets/images/sandwich.jpg');
+const soupImage = require('../../assets/images/soup.jpg');
+const tacoImage = require('../../assets/images/taco.jpg');
+const curryImage = require('../../assets/images/curry.jpg');
+const dessertImage = require('../../assets/images/dessert.jpg');
+const pastaDescription = 'A creamy Alfredo pasta with garlic, mushrooms, and a blend of cheeses. An Italian classic that is rich and comforting.';
+const saladDescription = 'A fresh garden salad with mixed greens, tomatoes, cucumbers, and a light vinaigrette. A healthy and refreshing choice.';
+const burgerDescription = 'A juicy beef burger with lettuce, tomato, cheese, and a special sauce. Served with a side of crispy fries.';
+const sushiDescription = 'An assortment of fresh sushi rolls, including California rolls, spicy tuna, and veggie rolls. Served with soy sauce and wasabi.';
+const sandwichDescription = 'A hearty club sandwich with turkey, bacon, lettuce, tomato, and mayo. Perfect for a quick and tasty lunch.';
+const soupDescription = 'A warm and comforting bowl of chicken noodle soup, with tender chicken, noodles, and vegetables in a savory broth.';
+const tacoDescription = 'Three soft tacos filled with seasoned beef, lettuce, cheese, and salsa. A flavorful and satisfying Mexican dish.';
+const curryDescription = 'A rich and spicy chicken curry with tender pieces of chicken in a creamy coconut sauce. Served with steamed rice.';
+const dessertDescription = 'A decadent chocolate cake with layers of rich chocolate frosting. A perfect ending to any meal.';
+const pizza_description = 'A delightful vegetarian pizza loaded with fresh and flavorful toppings. Perfect for a satisfying and meat-free meal!';
+const pizza_price = 10;
+const pastaPrice = 12;
+const saladPrice = 8;
+const burgerPrice = 11;
+const sushiPrice = 15;
+const sandwichPrice = 9;
+const soupPrice = 7;
+const tacoPrice = 10;
+const curryPrice = 13;
+const dessertPrice = 6;
+//Non-veg Items
+const burgerImage = require('../../assets/images/burger.jpg');
+const burger_description = 'A juicy, all-beef patty stacked high with crisp lettuce, vine-ripened tomato, creamy mayo, and tangy pickles on a toasted sesame seed bun.';
+const burger_price = 5;
 
 // @ts-ignore
 const HomeScreen = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
+    const [searchText, setSearchText] = useState('');
     const [animation, setAnimation] = useState(new Animated.Value(-500));
     const [loaded, setLoaded] = useState(false);
     const [selectedOption, setSelectedOption] = useState('all');
@@ -32,6 +65,7 @@ const HomeScreen = ({navigation}) => {
     const [nonVegButtonPressed, setNonVegButtonPressed] = useState(false);
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+        setSearchText('');
         setRefreshing(false);
         animation.setValue(-500);
         Animated.timing(animation, {
@@ -43,7 +77,7 @@ const HomeScreen = ({navigation}) => {
         setLoaded(true);
     }, []);
     const renderVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
-        if (selectedOption === 'veg' || selectedOption === 'all') {
+        if ((selectedOption === 'veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {
             return (
                 <TouchableOpacity
                     testID={itemTitle}
@@ -67,8 +101,7 @@ const HomeScreen = ({navigation}) => {
         }
     }
     const renderNonVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
-        if (selectedOption === 'non-veg' || selectedOption === 'all') {
-            return (
+        if ((selectedOption === 'non-veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {            return (
                 <TouchableOpacity
                     testID={itemTitle}
                     onPress={() => navigation.navigate('QuantityScreen', { itemTitle })}
@@ -125,46 +158,20 @@ const HomeScreen = ({navigation}) => {
             </View>
         );
     };
-    const pizzaImage = require('../../assets/images/pizza.jpg');
-    const pastaImage = require('../../assets/images/pasta.jpg');
-    const saladImage = require('../../assets/images/salad.jpg');
-    const sushiImage = require('../../assets/images/sushi.jpg');
-    const sandwichImage = require('../../assets/images/sandwich.jpg');
-    const soupImage = require('../../assets/images/soup.jpg');
-    const tacoImage = require('../../assets/images/taco.jpg');
-    const curryImage = require('../../assets/images/curry.jpg');
-    const dessertImage = require('../../assets/images/dessert.jpg');
-    const pastaDescription = 'A creamy Alfredo pasta with garlic, mushrooms, and a blend of cheeses. An Italian classic that is rich and comforting.';
-    const saladDescription = 'A fresh garden salad with mixed greens, tomatoes, cucumbers, and a light vinaigrette. A healthy and refreshing choice.';
-    const burgerDescription = 'A juicy beef burger with lettuce, tomato, cheese, and a special sauce. Served with a side of crispy fries.';
-    const sushiDescription = 'An assortment of fresh sushi rolls, including California rolls, spicy tuna, and veggie rolls. Served with soy sauce and wasabi.';
-    const sandwichDescription = 'A hearty club sandwich with turkey, bacon, lettuce, tomato, and mayo. Perfect for a quick and tasty lunch.';
-    const soupDescription = 'A warm and comforting bowl of chicken noodle soup, with tender chicken, noodles, and vegetables in a savory broth.';
-    const tacoDescription = 'Three soft tacos filled with seasoned beef, lettuce, cheese, and salsa. A flavorful and satisfying Mexican dish.';
-    const curryDescription = 'A rich and spicy chicken curry with tender pieces of chicken in a creamy coconut sauce. Served with steamed rice.';
-    const dessertDescription = 'A decadent chocolate cake with layers of rich chocolate frosting. A perfect ending to any meal.';
-    const pizza_description = 'A delightful vegetarian pizza loaded with fresh and flavorful toppings. Perfect for a satisfying and meat-free meal!';
-    const pizza_price = 10;
-    const pastaPrice = 12;
-    const saladPrice = 8;
-    const burgerPrice = 11;
-    const sushiPrice = 15;
-    const sandwichPrice = 9;
-    const soupPrice = 7;
-    const tacoPrice = 10;
-    const curryPrice = 13;
-    const dessertPrice = 6;
-    //Non-veg Items
-    const burgerImage = require('../../assets/images/burger.jpg');
-    const burger_description = 'A juicy, all-beef patty stacked high with crisp lettuce, vine-ripened tomato, creamy mayo, and tangy pickles on a toasted sesame seed bun.';
-    const burger_price = 5;
+    const handleSearchChange = (text: string) => {
+        setSearchText(text);
+    };
 
     useFocusEffect(React.useCallback(() => {
             return () => {
                 setVegButtonPressed(false);
                 setNonVegButtonPressed(false);
             };
-        }, []));
+        }, [])); // Reset the button state when the screen loses focus
+    useFocusEffect(React.useCallback(() => {
+            // Reset the searchText state variable when the screen comes into focus
+            setSearchText('');
+        }, [])); // Reset the searchText state variable when the screen comes into focus
     useEffect(() => {
         if (!modalVisible) {
             setVegButtonPressed(false);
@@ -180,8 +187,15 @@ const HomeScreen = ({navigation}) => {
         }).start();
     }, []);
 
+
   return (
       <View style={styles.container}>
+          <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Image
+                  source={require('../../../android/app/src/main/res/mipmap-hdpi/ic_launcher.png')}
+                  style={{width: 50, height: 50, borderRadius: 10}}
+              />
+          </View>
           <View style={styles.searchContainer}>
               <Image
                   source={require('../../assets/images/search_icon.png')}
@@ -191,6 +205,8 @@ const HomeScreen = ({navigation}) => {
               <TextInput
                   style={styles.inputStyle}
                   placeholder="Search for items..."
+                  onChangeText={handleSearchChange}
+                  value={searchText}
               />
           </View>
     <ScrollView style={styles.container}
@@ -199,10 +215,10 @@ const HomeScreen = ({navigation}) => {
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />
-                }
-    >
+                }>
         <Animated.View style={{ transform: [{ translateX: animation }] }}>
             {renderSortOption()}
+
             {renderVegItem("Pizza", pizzaImage, pizza_description, pizza_price)}
             {renderVegItem("Pasta", pastaImage, pastaDescription, pastaPrice)}
             {renderVegItem("Salad", saladImage, saladDescription, saladPrice)}
@@ -277,7 +293,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     sortContainer: {
-        padding: 10,
+        padding: 5,
         alignItems: 'flex-start',
         justifyContent: 'center',
     },
@@ -289,9 +305,9 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: "white",
+        backgroundColor: "grey",
         borderRadius: 20,
-        padding: 35,
+        padding: 30,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -316,9 +332,11 @@ const styles = StyleSheet.create({
     },
     vegButton: {
         backgroundColor: '#32CD32',
+        width: 200,
     },
     nonVegButton: {
         backgroundColor: '#FF4500',
+        width: 200,
     },
     vegButtonPressed: {
         backgroundColor: '#228B22',

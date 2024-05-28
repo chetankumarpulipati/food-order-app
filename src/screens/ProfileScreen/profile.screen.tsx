@@ -1,43 +1,35 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 
 const ProfileScreen = () => {
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.profileImage}
-                source={require('../../assets/images/person.png')}
+            <Text style={styles.profile}>Profile</Text>
+            <ImageBackground
+                style={styles.background}
             />
-            <Text style={styles.name}>John Doe</Text>
-            <Text style={styles.email}>john.doe@example.com</Text>
         </View>
+
     );
 };
 
 const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            // backgroundColor: '#F5FCFF',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            marginTop: 50,
-        },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 10,
-        marginBottom: 20,
-        backgroundColor: 'black',
+    container: {
+
     },
-    name: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 10,
+    background: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#0601B4',
+        borderRadius: 5,
+        margin: 10,
     },
-    email: {
-        fontSize: 18,
-        marginBottom: 20,
-    },
+    profile: {
+        fontSize: 30,
+        textAlign: 'left',
+        margin: 10,
+        padding: 10,
+    }
 });
 
 export default ProfileScreen;

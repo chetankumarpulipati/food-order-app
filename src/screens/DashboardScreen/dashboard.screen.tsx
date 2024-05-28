@@ -47,6 +47,7 @@ const DashboardScreen = () => {
                                     style={{width: size, height: size, tintColor: color}}
                                 />
                             ),
+                            headerShown: false,
                             headerStyle: { backgroundColor: 'grey' },
                         }}/>
         </Tab.Navigator>

@@ -36,7 +36,7 @@ const App = () => {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen
-                    name="Home"
+                    name="dashboard"
                     component={DashboardScreen}
                     options={{
                         headerTitle: () => (
@@ -47,7 +47,12 @@ const App = () => {
                         ),
                         headerTitleAlign: 'center',
                         headerStyle: { backgroundColor: 'grey', height: 80},
+                        headerShown: false,
                     }}
+                />
+                <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
                 />
                 <Stack.Screen
                     name="cart"
