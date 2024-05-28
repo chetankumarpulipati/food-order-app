@@ -19,7 +19,7 @@ const QuantityScreen: React.FC<Props> = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text></Text>
+
         </View>
     );
 };

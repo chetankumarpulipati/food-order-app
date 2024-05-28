@@ -19,6 +19,7 @@ import {TouchableOpacity, TouchableHighlight} from "react-native-gesture-handler
 import { Easing } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
+// Veg Items
 const pizzaImage = require('../../assets/images/pizza.jpg');
 const pastaImage = require('../../assets/images/pasta.jpg');
 const saladImage = require('../../assets/images/salad.jpg');
@@ -48,10 +49,41 @@ const soupPrice = 7;
 const tacoPrice = 10;
 const curryPrice = 13;
 const dessertPrice = 6;
+
 //Non-veg Items
 const burgerImage = require('../../assets/images/burger.jpg');
 const burger_description = 'A juicy, all-beef patty stacked high with crisp lettuce, vine-ripened tomato, creamy mayo, and tangy pickles on a toasted sesame seed bun.';
 const burger_price = 5;
+const Chicken_tikka_image: any = require('../../assets/images/chicken_tikka_masala.jpg');
+const chicken_tikka_masala_description = 'A classic Indian dish made with tender pieces of chicken marinated in yogurt and spices, then cooked in a rich tomato-based sauce.';
+const chicken_tikka_masala_price = 14;
+const rogan_josh = require('../../assets/images/rogan_josh.jpg');
+const rogan_josh_description = 'A flavorful and aromatic lamb curry made with tender pieces of lamb cooked in a rich and spicy tomato-based sauce.';
+const rogan_josh_price = 16;
+const chicken_biryani = require('../../assets/images/chicken_biryani.jpg');
+const chicken_biryani_description = 'A fragrant and flavorful rice dish made with basmati rice, tender pieces of chicken, and a blend of spices and herbs.';
+const chicken_biryani_price = 18;
+const fish_curry = require('../../assets/images/fish_curry.jpg');
+const fish_curry_description = 'A spicy and tangy fish curry made with fresh fish fillets, tomatoes, tamarind, and a blend of South Indian spices.';
+const fish_curry_price = 20;
+const tandoori_chicken = require('../../assets/images/tandoori_chicken.jpg');
+const tandoori_chicken_description = 'A classic Indian dish made with marinated chicken cooked in a tandoor oven until tender and charred.';
+const tandoori_chicken_price = 22;
+const mutton_korma = require('../../assets/images/mutton_korma.jpg');
+const mutton_horma_description = 'A rich and creamy mutton curry made with tender pieces of mutton cooked in a spiced yogurt and nut-based sauce.';
+const mutton_korma_price = 24;
+const goan_fish_curry = require('../../assets/images/goan_fish_curry.jpg');
+const goan_fish_curry_description = 'A spicy and tangy fish curry made with fresh fish fillets, coconut milk, tamarind, and a blend of Goan spices.';
+const goan_fish_curry_price = 26;
+const chicken_chettinad = require('../../assets/images/chicken_chettinad.jpg');
+const chicken_chettinad_description = 'A spicy and flavorful chicken curry made with tender pieces of chicken cooked in a spicy and aromatic Chettinad masala.';
+const chicken_chettinad_price = 28;
+const hyderabadi_dum_biryani = require('../../assets/images/hyderabadi_dum_biryani.jpg');
+const hyderabadi_dum_biryani_description = 'A fragrant and flavorful rice dish made with basmati rice, tender pieces of chicken, and a blend of spices and herbs, cooked in the traditional Hyderabadi dum style.';
+const hyderabadi_dum_biryani_price = 30;
+const kerala_fish_fry = require('../../assets/images/kerala_fish_fry.jpg');
+const kerala_fish_fry_description = 'A crispy and flavorful fish fry made with fresh fish fillets marinated in a blend of spices and fried until golden brown.';
+const kerala_fish_fry_price = 32;
 
 // @ts-ignore
 const HomeScreen = ({navigation}) => {
@@ -89,7 +121,7 @@ const HomeScreen = ({navigation}) => {
                     <View style={{flex: 1}}>
                         <Text style={{fontSize: 16, fontWeight: 'bold'}}>{itemTitle}</Text>
                         <Text style={{fontSize: 14, color: '#999'}}>{description}</Text>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 5}}>${price}</Text>
+                        <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 5}}>₹{price}</Text>
                         <Text style={styles.vegLabel}>
                             <Image source={require('../../assets/images/veg.png')}
                                    style={{width: 16, height: 16, marginRight: 5}}/>
@@ -167,11 +199,11 @@ const HomeScreen = ({navigation}) => {
                 setVegButtonPressed(false);
                 setNonVegButtonPressed(false);
             };
-        }, [])); // Reset the button state when the screen loses focus
+        }, []));
     useFocusEffect(React.useCallback(() => {
             // Reset the searchText state variable when the screen comes into focus
             setSearchText('');
-        }, [])); // Reset the searchText state variable when the screen comes into focus
+        }, []));
     useEffect(() => {
         if (!modalVisible) {
             setVegButtonPressed(false);
@@ -186,6 +218,9 @@ const HomeScreen = ({navigation}) => {
             useNativeDriver: true
         }).start();
     }, []);
+    useFocusEffect(React.useCallback(() => {
+            setSelectedOption('all');
+        }, []));
 
 
   return (
@@ -231,6 +266,16 @@ const HomeScreen = ({navigation}) => {
             {renderVegItem("Dessert", dessertImage, dessertDescription, dessertPrice)}
 
             {renderNonVegItem("Burger", burgerImage, burger_description, burger_price)}
+            {renderNonVegItem("Butter Chicken (Murgh Makhani)", Chicken_tikka_image, chicken_tikka_masala_description, chicken_tikka_masala_price)}
+            {renderNonVegItem("Rogan Josh (Lamb Curry)", rogan_josh, rogan_josh_description, rogan_josh_price)}
+            {renderNonVegItem("Chicken Biryani", chicken_biryani, chicken_biryani_description, chicken_biryani_price)}
+            {renderNonVegItem("Fish Curry (Meen Curry)", fish_curry, fish_curry_description, fish_curry_price)}
+            {renderNonVegItem("Tandoori Chicken", tandoori_chicken, tandoori_chicken_description, tandoori_chicken_price)}
+            {renderNonVegItem("Mutton Korma", mutton_korma, mutton_horma_description, mutton_korma_price)}
+            {renderNonVegItem("Goan Fish Curry", goan_fish_curry, goan_fish_curry_description, goan_fish_curry_price)}
+            {renderNonVegItem("Chicken Chettinad", chicken_chettinad, chicken_chettinad_description, chicken_chettinad_price)}
+            {renderNonVegItem("Hyderabadi Dum Biryani", hyderabadi_dum_biryani, hyderabadi_dum_biryani_description, hyderabadi_dum_biryani_price)}
+            {renderNonVegItem("Kerala Fish Fry", kerala_fish_fry, kerala_fish_fry_description, kerala_fish_fry_price)}
         </Animated.View>
     </ScrollView>
       </View>
