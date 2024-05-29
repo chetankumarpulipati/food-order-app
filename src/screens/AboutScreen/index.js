@@ -1,2 +1,4 @@
-import react from 'react';
+import aboutScreen from "./about.screen";
 
+
+export default aboutScreen;

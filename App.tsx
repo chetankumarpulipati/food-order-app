@@ -10,6 +10,7 @@ import RestaurantScreen from './src/screens/RestaurantScreen';
 import DashboardScreen from './src/screens/DashboardScreen/dashboard.screen';
 import { RouteProp } from '@react-navigation/native';
 import {Image, LogBox} from 'react-native';
+import AboutScreen from "./src/screens/AboutScreen";
 
 
 type RootStackParamList = {
@@ -20,6 +21,7 @@ type RootStackParamList = {
     QuantityScreen: { itemTitle: string };
     RestaurantScreen: undefined;
     dashboard: undefined;
+    AboutScreen: undefined;
 };
 
 type QuantityScreenRouteProp = RouteProp<RootStackParamList, 'QuantityScreen'>;
@@ -86,6 +88,13 @@ const App = () => {
                 <Stack.Screen
                     name="RestaurantScreen"
                     component={RestaurantScreen}
+                    options={{
+                        headerTitleAlign: 'center',
+                    }}
+                />
+                <Stack.Screen
+                    name="AboutScreen"
+                    component={AboutScreen}
                     options={{
                         headerTitleAlign: 'center',
                     }}

@@ -7,8 +7,9 @@ import {
     View,
     TouchableOpacity,
     ScrollView,
-    TouchableNativeFeedback
+    TouchableNativeFeedback, TouchableHighlight
 } from 'react-native';
+import { Linking } from 'react-native';
 
 
 const ProfileScreen = () => {
@@ -85,8 +86,11 @@ const ProfileScreen = () => {
                     />
                 </View>
             </TouchableNativeFeedback>
-            <TouchableNativeFeedback style={styles.frame}>
-                <View testID="Help" style={styles.more_container}>
+            <TouchableNativeFeedback onPress={() => {
+                    const url = 'https://www.google.com';
+                    Linking.openURL(url);
+                }} style={styles.frame}>
+                <View testID="about" style={styles.more_container}>
                     <Image source={require('../../assets/images/info.png')} style={{ width: 30, height: 30, marginRight: 10, marginLeft: 10 }} />
                     <View style={{flexDirection: 'column', justifyContent: 'center' }}>
                         <Text style={{ fontFamily: 'DM Sans',fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: 'black', marginTop: 8 }}>About App</Text>
@@ -97,6 +101,40 @@ const ProfileScreen = () => {
                     />
                 </View>
             </TouchableNativeFeedback>
+            <View style={styles.bottom_icons}>
+                <TouchableHighlight
+                    onPress={() => {
+                    const url = 'https://www.google.com';
+                    Linking.openURL(url);
+                }}>
+                <Image
+                    source={require('../../assets/images/icon_instagram.png')}
+                    style={{ width: 30, height: 30}}
+                />
+                </TouchableHighlight>
+                <TouchableHighlight
+                    onPress={() => {
+                        const url = 'https://www.google.com';
+                        Linking.openURL(url);
+                    }}
+                >
+                    <Image
+                        source={require('../../assets/images/icon_facebook.png')}
+                        style={{ width: 25, height: 25, marginLeft: 10}}
+                    />
+                </TouchableHighlight>
+                <TouchableHighlight
+                    onPress={() => {
+                        const url = 'https://www.google.com';
+                        Linking.openURL(url);
+                    }}
+                >
+                    <Image
+                    source={require('../../assets/images/icon_x_twitter.png')}
+                    style={{ width: 25, height: 25, marginLeft: 10, borderRadius: 10}}
+                /></TouchableHighlight>
+
+            </View>
         </ScrollView>
     );
 };
@@ -147,6 +185,12 @@ const styles = StyleSheet.create({
         margin: 10,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    bottom_icons: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 

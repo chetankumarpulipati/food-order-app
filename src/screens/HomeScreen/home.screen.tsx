@@ -46,77 +46,45 @@ const tacoPrice = 10;
 const curryPrice = 13;
 const dessertPrice = 6;
 
+
 //Non-veg Items
-const burgerImage = require('../../assets/images/burger.jpg');
-const burger_description = 'A juicy, all-beef patty stacked high with crisp lettuce, vine-ripened tomato, creamy mayo, and tangy pickles on a toasted sesame seed bun.';
-const burger_price = 5;
-const Chicken_tikka_image: any = require('../../assets/images/chicken_tikka_masala.jpg');
-const chicken_tikka_masala_description = 'A classic Indian dish made with tender pieces of chicken marinated in yogurt and spices, then cooked in a rich tomato-based sauce.';
-const chicken_tikka_masala_price = 14;
-const rogan_josh = require('../../assets/images/rogan_josh.jpg');
-const rogan_josh_description = 'A flavorful and aromatic lamb curry made with tender pieces of lamb cooked in a rich and spicy tomato-based sauce.';
-const rogan_josh_price = 16;
-const chicken_biryani = require('../../assets/images/chicken_biryani.jpg');
-const chicken_biryani_description = 'A fragrant and flavorful rice dish made with basmati rice, tender pieces of chicken, and a blend of spices and herbs.';
-const chicken_biryani_price = 18;
-const fish_curry = require('../../assets/images/fish_curry.jpg');
-const fish_curry_description = 'A spicy and tangy fish curry made with fresh fish fillets, tomatoes, tamarind, and a blend of South Indian spices.';
-const fish_curry_price = 20;
-const tandoori_chicken = require('../../assets/images/tandoori_chicken.jpg');
-const tandoori_chicken_description = 'A classic Indian dish made with marinated chicken cooked in a tandoor oven until tender and charred.';
-const tandoori_chicken_price = 22;
-const mutton_korma = require('../../assets/images/mutton_korma.jpg');
-const mutton_horma_description = 'A rich and creamy mutton curry made with tender pieces of mutton cooked in a spiced yogurt and nut-based sauce.';
-const mutton_korma_price = 24;
 const goan_fish_curry = require('../../assets/images/goan_fish_curry.jpg');
-const goan_fish_curry_description = 'A spicy and tangy fish curry made with fresh fish fillets, coconut milk, tamarind, and a blend of Goan spices.';
-const goan_fish_curry_price = 26;
+const burgerImage = require('../../assets/images/burger.jpg');
+const Chicken_tikka_image: any = require('../../assets/images/chicken_tikka_masala.jpg');
+const rogan_josh = require('../../assets/images/rogan_josh.jpg');
+const chicken_biryani = require('../../assets/images/chicken_biryani.jpg');
+const fish_curry = require('../../assets/images/fish_curry.jpg');
+const tandoori_chicken = require('../../assets/images/tandoori_chicken.jpg');
+const mutton_korma = require('../../assets/images/mutton_korma.jpg');
 const chicken_chettinad = require('../../assets/images/chicken_chettinad.jpg');
-const chicken_chettinad_description = 'A spicy and flavorful chicken curry made with tender pieces of chicken cooked in a spicy and aromatic Chettinad masala.';
-const chicken_chettinad_price = 28;
 const hyderabadi_dum_biryani = require('../../assets/images/hyderabadi_dum_biryani.jpg');
-const hyderabadi_dum_biryani_description = 'A fragrant and flavorful rice dish made with basmati rice, tender pieces of chicken, and a blend of spices and herbs, cooked in the traditional Hyderabadi dum style.';
-const hyderabadi_dum_biryani_price = 30;
 const kerala_fish_fry = require('../../assets/images/kerala_fish_fry.jpg');
+const chicken_tikka_masala_description = 'A creamy and flavorful chicken curry made with marinated chicken cooked in a spiced tomato-based sauce.';
+const fish_curry_description = 'A spicy and tangy fish curry made with fresh fish fillets, tomatoes, tamarind, and a blend of South Indian spices.';
+const chicken_biryani_description = 'A fragrant and flavorful rice dish made with basmati rice, tender pieces of chicken, and a blend of spices and herbs.';
+const rogan_josh_description = 'A flavorful and aromatic lamb curry made with tender pieces of lamb cooked in a rich and spicy tomato-based sauce.';
+const burger_description = 'A juicy, all-beef patty stacked high with crisp lettuce, vine-ripened tomato, creamy mayo, and tangy pickles on a toasted sesame seed bun.';
+const tandoori_chicken_description = 'A classic Indian dish made with marinated chicken cooked in a tandoor oven until tender and charred.';
+const mutton_horma_description = 'A rich and creamy mutton curry made with tender pieces of mutton cooked in a spiced yogurt and nut-based sauce.';
+const goan_fish_curry_description = 'A spicy and tangy fish curry made with fresh fish fillets, coconut milk, tamarind, and a blend of Goan spices.';
+const chicken_chettinad_description = 'A spicy and flavorful chicken curry made with tender pieces of chicken cooked in a spicy and aromatic Chettinad masala.';
+const hyderabadi_dum_biryani_description = 'A fragrant and flavorful rice dish made with basmati rice, tender pieces of chicken, and a blend of spices and herbs, cooked in the traditional Hyderabadi dum style.';
 const kerala_fish_fry_description = 'A crispy and flavorful fish fry made with fresh fish fillets marinated in a blend of spices and fried until golden brown.';
+const burger_price = 5;
+const chicken_tikka_masala_price = 14;
+const rogan_josh_price = 16;
+const chicken_biryani_price = 18;
+const tandoori_chicken_price = 22;
+const fish_curry_price = 20;
+const mutton_korma_price = 24;
+const goan_fish_curry_price = 26;
+const chicken_chettinad_price = 28;
+const hyderabadi_dum_biryani_price = 30;
 const kerala_fish_fry_price = 32;
-const items = [
-    { title: "Pizza", image: pizzaImage, description: pizza_description, price: pizza_price },
-    { title: "Pasta", image: pastaImage, description: pastaDescription, price: pastaPrice },
-    { title: "Salad", image: saladImage, description: saladDescription, price: saladPrice },
-    { title: "Veg Burger", image: burgerImage, description: burgerDescription, price: burgerPrice },
-    { title: "Sushi", image: sushiImage, description: sushiDescription, price: sushiPrice },
-    { title: "Sandwich", image: sandwichImage, description: sandwichDescription, price: sandwichPrice },
-    { title: "Soup", image: soupImage, description: soupDescription, price: soupPrice },
-    { title: "Taco", image: tacoImage, description: tacoDescription, price: tacoPrice },
-    { title: "Curry", image: curryImage, description: curryDescription, price: curryPrice },
-    { title: "Dessert", image: dessertImage, description: dessertDescription, price: dessertPrice },
-    { title: "Burger", image: burgerImage, description: burger_description, price: burger_price },
-    { title: "Butter Chicken (Murgh Makhani)", image: Chicken_tikka_image, description: chicken_tikka_masala_description, price: chicken_tikka_masala_price },
-    { title: "Rogan Josh (Lamb Curry)", image: rogan_josh, description: rogan_josh_description, price: rogan_josh_price },
-    { title: "Chicken Biryani", image: chicken_biryani, description: chicken_biryani_description, price: chicken_biryani_price },
-    { title: "Fish Curry (Meen Curry)", image: fish_curry, description: fish_curry_description, price: fish_curry_price },
-    { title: "Tandoori Chicken", image: tandoori_chicken, description: tandoori_chicken_description, price: tandoori_chicken_price },
-    { title: "Mutton Korma", image: mutton_korma, description: mutton_horma_description, price: mutton_korma_price },
-    { title: "Goan Fish Curry", image: goan_fish_curry, description: goan_fish_curry_description, price: goan_fish_curry_price },
-    { title: "Chicken Chettinad", image: chicken_chettinad, description: chicken_chettinad_description, price: chicken_chettinad_price },
-    { title: "Hyderabadi Dum Biryani", image: hyderabadi_dum_biryani, description: hyderabadi_dum_biryani_description, price: hyderabadi_dum_biryani_price },
-    { title: "Kerala Fish Fry", image: kerala_fish_fry, description: kerala_fish_fry_description, price: kerala_fish_fry_price },
-];
 
 // @ts-ignore
 const HomeScreen = ({navigation}) => {
     const [sortedItems, setSortedItems] = useState([]);
-    const sortItemsLowToHigh = () => {
-        const sorted = [...items].sort((a, b) => a.price - b.price);
-        setSortedItems(sorted);
-        setModalVisible(false); // Close the modal
-    };
-    const sortItemsHighToLow = () => {
-        const sorted = [...items].sort((a, b) => b.price - a.price);
-        setSortedItems(sorted);
-        setModalVisible(false); // Close the modal
-    };
     const [refreshing, setRefreshing] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [animation, setAnimation] = useState(new Animated.Value(-500));
@@ -141,8 +109,6 @@ const HomeScreen = ({navigation}) => {
         setLoaded(true);
     }, []);
     const renderVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
-        const itemsToRender = sortedItems.length > 0 ? sortedItems : items;
-        const item = itemsToRender.find(item => item.title === itemTitle);
         if ((selectedOption === 'veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {
             return (
                 <TouchableNativeFeedback
@@ -167,8 +133,6 @@ const HomeScreen = ({navigation}) => {
         }
     }
     const renderNonVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
-        const itemsToRender = sortedItems.length > 0 ? sortedItems : items;
-        const item = itemsToRender.find(item => item.title === itemTitle);
         if ((selectedOption === 'non-veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {            return (
                 <TouchableNativeFeedback
                     testID={itemTitle}
@@ -279,7 +243,6 @@ const HomeScreen = ({navigation}) => {
                 useNativeDriver: true
             }).start();
         }, []));
-
 
   return (
       <View style={styles.container}>
