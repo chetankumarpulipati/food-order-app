@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {View, Text, StyleSheet, Image} from "react-native";
 import { RouteProp } from '@react-navigation/native';
 
 type RootStackParamList = {
@@ -13,13 +13,13 @@ type Props = {
 };
 
 const QuantityScreen: React.FC<Props> = ({ route }) => {
-    useEffect(() => {
-        // console.log("Title: ", route.params.itemTitle);
-    }, []);
+    // @ts-ignore
+    const { itemTitle, imageSource, description, price, } = route.params;
 
     return (
         <View style={styles.container}>
-
+            <Text style={{fontSize: 16, color: '#999'}}>{description}</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>₹{price}</Text>
         </View>
     );
 };

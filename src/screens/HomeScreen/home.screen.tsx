@@ -8,14 +8,10 @@ import {
     TextInput,
     RefreshControl,
     Animated,
-    PermissionsAndroid,
-    Button,
     Modal,
-    Alert,
     Pressable,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {TouchableOpacity, TouchableHighlight} from "react-native-gesture-handler";
+import {TouchableOpacity, TouchableNativeFeedback} from "react-native-gesture-handler";
 import { Easing } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -84,9 +80,43 @@ const hyderabadi_dum_biryani_price = 30;
 const kerala_fish_fry = require('../../assets/images/kerala_fish_fry.jpg');
 const kerala_fish_fry_description = 'A crispy and flavorful fish fry made with fresh fish fillets marinated in a blend of spices and fried until golden brown.';
 const kerala_fish_fry_price = 32;
+const items = [
+    { title: "Pizza", image: pizzaImage, description: pizza_description, price: pizza_price },
+    { title: "Pasta", image: pastaImage, description: pastaDescription, price: pastaPrice },
+    { title: "Salad", image: saladImage, description: saladDescription, price: saladPrice },
+    { title: "Veg Burger", image: burgerImage, description: burgerDescription, price: burgerPrice },
+    { title: "Sushi", image: sushiImage, description: sushiDescription, price: sushiPrice },
+    { title: "Sandwich", image: sandwichImage, description: sandwichDescription, price: sandwichPrice },
+    { title: "Soup", image: soupImage, description: soupDescription, price: soupPrice },
+    { title: "Taco", image: tacoImage, description: tacoDescription, price: tacoPrice },
+    { title: "Curry", image: curryImage, description: curryDescription, price: curryPrice },
+    { title: "Dessert", image: dessertImage, description: dessertDescription, price: dessertPrice },
+    { title: "Burger", image: burgerImage, description: burger_description, price: burger_price },
+    { title: "Butter Chicken (Murgh Makhani)", image: Chicken_tikka_image, description: chicken_tikka_masala_description, price: chicken_tikka_masala_price },
+    { title: "Rogan Josh (Lamb Curry)", image: rogan_josh, description: rogan_josh_description, price: rogan_josh_price },
+    { title: "Chicken Biryani", image: chicken_biryani, description: chicken_biryani_description, price: chicken_biryani_price },
+    { title: "Fish Curry (Meen Curry)", image: fish_curry, description: fish_curry_description, price: fish_curry_price },
+    { title: "Tandoori Chicken", image: tandoori_chicken, description: tandoori_chicken_description, price: tandoori_chicken_price },
+    { title: "Mutton Korma", image: mutton_korma, description: mutton_horma_description, price: mutton_korma_price },
+    { title: "Goan Fish Curry", image: goan_fish_curry, description: goan_fish_curry_description, price: goan_fish_curry_price },
+    { title: "Chicken Chettinad", image: chicken_chettinad, description: chicken_chettinad_description, price: chicken_chettinad_price },
+    { title: "Hyderabadi Dum Biryani", image: hyderabadi_dum_biryani, description: hyderabadi_dum_biryani_description, price: hyderabadi_dum_biryani_price },
+    { title: "Kerala Fish Fry", image: kerala_fish_fry, description: kerala_fish_fry_description, price: kerala_fish_fry_price },
+];
 
 // @ts-ignore
 const HomeScreen = ({navigation}) => {
+    const [sortedItems, setSortedItems] = useState([]);
+    const sortItemsLowToHigh = () => {
+        const sorted = [...items].sort((a, b) => a.price - b.price);
+        setSortedItems(sorted);
+        setModalVisible(false); // Close the modal
+    };
+    const sortItemsHighToLow = () => {
+        const sorted = [...items].sort((a, b) => b.price - a.price);
+        setSortedItems(sorted);
+        setModalVisible(false); // Close the modal
+    };
     const [refreshing, setRefreshing] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [animation, setAnimation] = useState(new Animated.Value(-500));
@@ -95,6 +125,8 @@ const HomeScreen = ({navigation}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [vegButtonPressed, setVegButtonPressed] = useState(false);
     const [nonVegButtonPressed, setNonVegButtonPressed] = useState(false);
+    const [lowToHighButtonPressed, setLowToHighButtonPressed] = useState(false);
+    const [highToLowButtonPressed, setHighToLowButtonPressed] = useState(false);
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setSearchText('');
@@ -109,11 +141,13 @@ const HomeScreen = ({navigation}) => {
         setLoaded(true);
     }, []);
     const renderVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
+        const itemsToRender = sortedItems.length > 0 ? sortedItems : items;
+        const item = itemsToRender.find(item => item.title === itemTitle);
         if ((selectedOption === 'veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {
             return (
-                <TouchableOpacity
+                <TouchableNativeFeedback
                     testID={itemTitle}
-                    onPress={() => navigation.navigate('QuantityScreen', {itemTitle})}
+                    onPress={() => navigation.navigate('QuantityScreen', {itemTitle, description, price})}
                     style={styles.design}>
                     <Image
                         source={imageSource}
@@ -128,13 +162,15 @@ const HomeScreen = ({navigation}) => {
                             VEG
                         </Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableNativeFeedback>
             );
         }
     }
     const renderNonVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
+        const itemsToRender = sortedItems.length > 0 ? sortedItems : items;
+        const item = itemsToRender.find(item => item.title === itemTitle);
         if ((selectedOption === 'non-veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {            return (
-                <TouchableOpacity
+                <TouchableNativeFeedback
                     testID={itemTitle}
                     onPress={() => navigation.navigate('QuantityScreen', { itemTitle })}
                     style={styles.design}>
@@ -144,13 +180,13 @@ const HomeScreen = ({navigation}) => {
                     <View style={{flex: 1}}>
                         <Text style={{fontSize: 16, fontWeight: 'bold'}}>{itemTitle}</Text>
                         <Text style={{fontSize: 14, color: '#999'}}>{description}</Text>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 5}}>${price}</Text>
+                        <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 5}}>₹{price}</Text>
                         <Text style={styles.non_vegLabel}>
                             <Image source={require('../../assets/images/non_veg.png')} style={{width: 16, height: 16}} />
                             NON-VEG
                         </Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableNativeFeedback>
             );
         }
     }
@@ -183,6 +219,20 @@ const HomeScreen = ({navigation}) => {
                                 onPressOut={() => setNonVegButtonPressed(false)}
                             >
                                 <Text style={styles.sortButtonText}>Non-Veg</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.sort_ascending]}
+                                onPressIn={() => {setSelectedOption('Price Low to High'); setModalVisible(false);}}
+                                onPressOut={() => setLoaded(true)}
+                            >
+                                <Text style={styles.sortButtonText}>Price Low to High</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.sort_ascending]}
+                                onPressIn={() => {setSelectedOption('Price Low to High'); setModalVisible(false);}}
+                                onPressOut={() => setLoaded(true)}
+                            >
+                                <Text style={styles.sortButtonText}>Price Low to High</Text>
                             </Pressable>
                         </View>
                     </View>
@@ -220,6 +270,14 @@ const HomeScreen = ({navigation}) => {
     }, []);
     useFocusEffect(React.useCallback(() => {
             setSelectedOption('all');
+        }, []));
+    useFocusEffect(React.useCallback(() => {
+            Animated.timing(animation, {
+                toValue: 0,
+                duration: 500,
+                easing: Easing.out(Easing.quad),
+                useNativeDriver: true
+            }).start();
         }, []));
 
 
@@ -285,20 +343,20 @@ const HomeScreen = ({navigation}) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  map: {
-    flex: 1,
-  },
-  design: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-  },
+    container: {
+        flex: 1,
+        padding: 10,
+    },
+    map: {
+        flex: 1,
+    },
+    design: {
+        display: 'flex',
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderColor: '#ddd',
+        padding: 10,
+    },
     placeholder: {
         height: 100,
         justifyContent: 'center',
@@ -376,17 +434,25 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     vegButton: {
-        backgroundColor: '#32CD32',
+        backgroundColor: '#ff6347',
         width: 200,
     },
     nonVegButton: {
-        backgroundColor: '#FF4500',
+        backgroundColor: '#ff6347',
         width: 200,
     },
     vegButtonPressed: {
-        backgroundColor: '#228B22',
+        backgroundColor: '#ff6347',
     },
     nonVegButtonPressed: {
-        backgroundColor: '#8B0000',
+        backgroundColor: '#ff6347',
     },
+    sort_ascending:{
+        backgroundColor: '#ff6347',
+        padding: 10,
+        borderRadius: 20,
+        width: 200,
+        alignItems: 'center',
+        margin: 5,
+    }
 });

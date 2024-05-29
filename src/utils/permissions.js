@@ -1,28 +1,21 @@
-// src/utils/Permissions.js
+import react from "react";
 
-import { PermissionsAndroid } from 'react-native';
 
-export const requestStoragePermission = async () => {
-    try {
-        const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            {
-                title: "Storage Permission",
-                message: "App needs access to your storage to download Photos.",
-                buttonNeutral: "Ask Me Later",
-                buttonNegative: "Cancel",
-                buttonPositive: "OK"
-            }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log("You can use the storage");
-            return true;
-        } else {
-            console.log("Storage permission denied");
-            return false;
-        }
-    } catch (err) {
-        console.warn(err);
-        return false;
+// Request permission to access photos
+const requestPhotosPermission = async () => {
+    const status = await Permissions.request('photos');
+
+    if (status === 'granted') {
+        // Access photos and videos
+        console.log('Photos permission granted');
+    } else if (status === 'denied') {
+        // Explain why the permission is needed and offer to retry
+        console.log('Photos permission denied');
+    } else if (status === 'blocked') {
+        // Open app settings to allow permission manually
+        console.log('Photos permission blocked');
     }
 };
+
+
+export default requestPhotosPermission;

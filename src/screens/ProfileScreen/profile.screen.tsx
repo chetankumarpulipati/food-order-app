@@ -1,59 +1,103 @@
 import React, { useState } from 'react';
-import { Image, Alert, StyleSheet, Text, View, TouchableOpacity, PermissionsAndroid } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {
+    Image,
+    Alert,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    ScrollView,
+    TouchableNativeFeedback
+} from 'react-native';
+
 
 const ProfileScreen = () => {
-    const [avatarSource, setAvatarSource] = useState<any>(require('../../assets/images/user_image.png'));
-
-    const requestStoragePermission = async () => {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                    title: "Storage Permission",
-                    message: "This app needs access to your storage to download Photos.",
-                    buttonNeutral: "Ask Me Later",
-                    buttonNegative: "Cancel",
-                    buttonPositive: "OK"
-                }
-            );
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-        } catch (err) {
-            console.warn(err);
-            return false;
-        }
-    };
-
-    const selectImage = async () => {
-        const hasPermission = await requestStoragePermission();
-        if (!hasPermission) {
-            Alert.alert('Permission required', 'This app needs the storage permission to select an image');
-            return;
-        }
-
-        launchImageLibrary({ mediaType: 'photo', quality: 1 }, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.errorMessage) {
-                console.log('ImagePicker Error: ', response.errorMessage);
-            } else if (response.assets && response.assets.length > 0) {
-                setAvatarSource({ uri: response.assets[0].uri });
-            }
-        });
-    };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.profile}>Profile</Text>
-            <View style={styles.background}>
-                <TouchableOpacity onPress={selectImage}>
+            {/* Profile Image and Details */}
+            <View style={[styles.background, { flexDirection: 'row', alignItems: 'center', padding: 10 }]}>
+                <View>
                     <Image
-                        source={avatarSource}
-                        style={{ width: 53, height: 53, position: 'absolute', top: 18, left: 20 }}
+                        source={require('../../assets/images/user_image.png')}
+                        style={{ width: 53, height: 53, marginRight: 10, marginLeft:10 }}
                     />
+                </View>
+                <View style={{ marginRight: 10 }}>
+                    <Text style={{ color: '#fff', fontSize: 20, textAlign: 'center' }}>John Doe</Text>
+                    <Text style={{ color: '#fff', fontSize: 16, textAlign: 'center' }}>@Itunuoluwa</Text>
+                </View>
+                <View style={{ flex: 1 }} />
+                <TouchableOpacity onPress={() => { /* handle edit action here */ }}>
+                    <Image source={require('../../assets/images/pencil_edit.png')} style={{ width: 20, height: 20, marginRight: 20 }} />
                 </TouchableOpacity>
             </View>
-        </View>
+            <TouchableNativeFeedback style={styles.frame}>
+                <View testID="My Account" style={styles.my_account_container}>
+                    <Image source={require('../../assets/images/account_circle.png')} style={{ width: 30, height: 30,  marginRight: 10, marginLeft: 10 }} />
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={{ fontFamily: 'DM Sans',fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>My Account</Text>
+                        <Text>Make changes to your account</Text>
+                    </View>
+                    <Image
+                        source={require('../../assets/images/chevron_right.png')}
+                        style={{ width: 20, height: 20, tintColor: '#000', marginLeft: 'auto', marginRight: 10}}
+                    />
+                </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback style={styles.frame}>
+                <View testID="Touch ID" style={styles.my_account_container}>
+                    <Image source={require('../../assets/images/lock.png')} style={{ width: 30, height: 30,  marginRight: 10, marginLeft: 10 }} />
+                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly' }}>
+                        <Text style={{ fontFamily: 'DM Sans',fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>Touch ID</Text>
+                        <Text>Manage your device security</Text>
+                    </View>
+                    <Image
+                        source={require('../../assets/images/chevron_right.png')}
+                        style={{ width: 20, height: 20, tintColor: '#000', marginLeft: 'auto',marginRight: 10}}
+                    />
+                </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback style={styles.frame}>
+                <View testID="Touch ID" style={styles.my_account_container}>
+                    <Image source={require('../../assets/images/logout.png')} style={{ width: 30, height: 30,  marginRight: 10, marginLeft: 10 }} />
+                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly' }}>
+                        <Text style={{ fontFamily: 'DM Sans',fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>Log out</Text>
+                        <Text>Further secure your account for safety</Text>
+                    </View>
+                    <Image
+                        source={require('../../assets/images/chevron_right.png')}
+                        style={{ width: 20, height: 20, tintColor: '#000', marginLeft: 'auto', marginRight: 10}}
+                    />
+                </View>
+            </TouchableNativeFeedback>
+            <Text style={{fontWeight: 'bold', fontSize: 20, marginLeft: 20}}>More</Text>
+            <TouchableNativeFeedback style={styles.frame}>
+                <View testID="Help" style={styles.more_container}>
+                    <Image source={require('../../assets/images/help.png')} style={{ width: 30, height: 30, marginRight: 10, marginLeft: 10 }} />
+                    <View style={{flexDirection: 'column', justifyContent: 'center' }}>
+                        <Text style={{ fontFamily: 'DM Sans',fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: 'black', marginTop: 8 }}>Help & Support</Text>
+                    </View>
+                    <Image
+                        source={require('../../assets/images/chevron_right.png')}
+                        style={{ width: 20, height: 20, tintColor: '#000', marginLeft: 'auto', marginRight: 10}}
+                    />
+                </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback style={styles.frame}>
+                <View testID="Help" style={styles.more_container}>
+                    <Image source={require('../../assets/images/info.png')} style={{ width: 30, height: 30, marginRight: 10, marginLeft: 10 }} />
+                    <View style={{flexDirection: 'column', justifyContent: 'center' }}>
+                        <Text style={{ fontFamily: 'DM Sans',fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: 'black', marginTop: 8 }}>About App</Text>
+                    </View>
+                    <Image
+                        source={require('../../assets/images/chevron_right.png')}
+                        style={{ width: 20, height: 20, tintColor: '#000', marginLeft: 'auto', marginRight: 10}}
+                    />
+                </View>
+            </TouchableNativeFeedback>
+        </ScrollView>
     );
 };
 
@@ -66,7 +110,8 @@ const styles = StyleSheet.create({
         height: 89,
         backgroundColor: '#0601B4',
         borderRadius: 5,
-        margin: 10,
+        marginTop: 10,
+        marginBottom: 30,
     },
     profile: {
         fontSize: 30,
@@ -75,7 +120,34 @@ const styles = StyleSheet.create({
         padding: 10,
         fontWeight: 'bold',
         fontFamily: 'DM Sans',
+        color: '#000',
     },
+    frame: {
+        borderWidth: 1,
+        borderColor: '#FFFFFF',
+        margin: 10,
+        borderRadius: 5,
+        height: 500,
+        alignItems: 'center',
+    },
+    my_account_container: {
+        flexDirection: 'row',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 5,
+        alignItems: 'center',
+        height: 60,
+        margin: 5,
+        fontSize: 10,
+    },
+    more_container: {
+        flexDirection: 'row',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 5,
+        height: 60,
+        margin: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 });
 
 export default ProfileScreen;
