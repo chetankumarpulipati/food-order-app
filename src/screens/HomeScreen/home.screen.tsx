@@ -85,6 +85,7 @@ const kerala_fish_fry_price = 32;
 // @ts-ignore
 const HomeScreen = ({navigation}) => {
     const [sortedItems, setSortedItems] = useState([]);
+    const [sortText, setSortText] = useState('');
     const [refreshing, setRefreshing] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [animation, setAnimation] = useState(new Animated.Value(-500));
@@ -98,6 +99,7 @@ const HomeScreen = ({navigation}) => {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setSearchText('');
+        setSortedItems([]); // Reset the sortedItems state
         setRefreshing(false);
         animation.setValue(-500);
         Animated.timing(animation, {
@@ -107,10 +109,11 @@ const HomeScreen = ({navigation}) => {
             useNativeDriver: true
         }).start();
         setLoaded(true);
-    }, []);
-    const renderVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
+    }, []);    const renderVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
         if ((selectedOption === 'veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {
-            return (
+            if (sortedItems.length > 0 && !sortedItems.some(item => item.title === itemTitle)) {
+                return null;
+            }            return (
                 <TouchableNativeFeedback
                     testID={itemTitle}
                     onPress={() => navigation.navigate('QuantityScreen', {itemTitle, description, price})}
@@ -133,25 +136,30 @@ const HomeScreen = ({navigation}) => {
         }
     }
     const renderNonVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
-        if ((selectedOption === 'non-veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {            return (
-                <TouchableNativeFeedback
-                    testID={itemTitle}
-                    onPress={() => navigation.navigate('QuantityScreen', { itemTitle })}
-                    style={styles.design}>
-                    <Image
-                        source={imageSource}
-                        style={{width: 80, height: 80, borderRadius: 5, marginRight: 16}} />
-                    <View style={{flex: 1}}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold'}}>{itemTitle}</Text>
-                        <Text style={{fontSize: 14, color: '#999'}}>{description}</Text>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 5}}>₹{price}</Text>
-                        <Text style={styles.non_vegLabel}>
-                            <Image source={require('../../assets/images/non_veg.png')} style={{width: 16, height: 16}} />
-                            NON-VEG
-                        </Text>
-                    </View>
-                </TouchableNativeFeedback>
-            );
+        if ((selectedOption === 'non-veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {
+            // Check if the item is in the sortedItems array
+            if (sortedItems.length > 0 && !sortedItems.some(item => item.title === itemTitle)) {
+                return null; // Don't render the item if it's not in the sortedItems array
+            }
+            return (
+            <TouchableNativeFeedback
+                testID={itemTitle}
+                onPress={() => navigation.navigate('QuantityScreen', { itemTitle })}
+                style={styles.design}>
+                <Image
+                    source={imageSource}
+                    style={{width: 80, height: 80, borderRadius: 5, marginRight: 16}} />
+                <View style={{flex: 1}}>
+                    <Text style={{fontSize: 16, fontWeight: 'bold'}}>{itemTitle}</Text>
+                    <Text style={{fontSize: 14, color: '#999'}}>{description}</Text>
+                    <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 5}}>₹{price}</Text>
+                    <Text style={styles.non_vegLabel}>
+                        <Image source={require('../../assets/images/non_veg.png')} style={{width: 16, height: 16}} />
+                        NON-VEG
+                    </Text>
+                </View>
+            </TouchableNativeFeedback>
+        );
         }
     }
     const renderSortOption = () => {
@@ -172,7 +180,12 @@ const HomeScreen = ({navigation}) => {
                         <View style={styles.modalView}>
                             <Pressable
                                 style={[styles.sortButton, vegButtonPressed ? styles.vegButtonPressed : styles.vegButton]}
-                                onPressIn={() => {setSelectedOption('veg'); setModalVisible(false); setVegButtonPressed(true);}}
+                                onPressIn={() => {
+                                    setSelectedOption('veg');
+                                    setModalVisible(false);
+                                    setVegButtonPressed(true);
+                                    setSortText('VEG-ITEMS'); // Add this line
+                                }}
                                 onPressOut={() => setVegButtonPressed(false)}
                             >
                                 <Text style={styles.sortButtonText}>Veg</Text>
@@ -186,17 +199,23 @@ const HomeScreen = ({navigation}) => {
                             </Pressable>
                             <Pressable
                                 style={[styles.sort_ascending]}
-                                onPressIn={() => {setSelectedOption('Price Low to High'); setModalVisible(false);}}
-                                onPressOut={() => setLoaded(true)}
+                                onPressIn={() => {
+                                    setModalVisible(false);
+                                    setSortedItems([]); // Reset the sortedItems state
+                                    setSortedItems(sortByPrice(foodItems, 'lowToHigh'));
+                                }}
                             >
                                 <Text style={styles.sortButtonText}>Price Low to High</Text>
                             </Pressable>
                             <Pressable
                                 style={[styles.sort_ascending]}
-                                onPressIn={() => {setSelectedOption('Price Low to High'); setModalVisible(false);}}
-                                onPressOut={() => setLoaded(true)}
+                                onPressIn={() => {
+                                    setModalVisible(false);
+                                    setSortedItems([]); // Reset the sortedItems state
+                                    setSortedItems(sortByPrice(foodItems, 'highToLow'));
+                                }}
                             >
-                                <Text style={styles.sortButtonText}>Price Low to High</Text>
+                                <Text style={styles.sortButtonText}>Price High to Low</Text>
                             </Pressable>
                         </View>
                     </View>
@@ -204,20 +223,202 @@ const HomeScreen = ({navigation}) => {
             </View>
         );
     };
+    const getUniqueItems = (items) => {
+        return items.reduce((unique, item) => {
+            return unique.findIndex(uniqueItem => uniqueItem.id === item.id && uniqueItem.title === item.title) !== -1 ? unique : [...unique, item];
+        }, []);
+    };
+    const sortByPrice = (data, order) => {
+        const uniqueItems = getUniqueItems(data); // Get unique items before sorting
+
+        const sortedItems = uniqueItems.sort((a, b) => {
+            if (order === 'lowToHigh') {
+                return a.price - b.price;
+            } else if (order === 'highToLow') {
+                return b.price - a.price;
+            } else {
+                return 0;
+            }
+        });
+        return sortedItems || [];
+    };
+    const foodItems = [
+        {
+            id: '1',
+            title: 'Pizza',
+            description: pizza_description,
+            image: pizzaImage,
+            price: pizza_price,
+            type: 'veg'
+        },
+        {
+            id: '2',
+            title: 'Pasta',
+            description: pastaDescription,
+            image: pastaImage,
+            price: pastaPrice,
+            type: 'veg'
+        },
+        {
+            id: '3',
+            title: 'Salad',
+            description: saladDescription,
+            image: saladImage,
+            price: saladPrice,
+            type: 'veg'
+        },
+        {
+            id: '4',
+            title: 'Sushi',
+            description: sushiDescription,
+            image: sushiImage,
+            price: sushiPrice,
+            type: 'veg'
+        },
+        {
+            id: '5',
+            title: 'Sandwich',
+            description: sandwichDescription,
+            image: sandwichImage,
+            price: sandwichPrice,
+            type: 'veg'
+        },
+        {
+            id: '6',
+            title: 'Soup',
+            description: soupDescription,
+            image: soupImage,
+            price: soupPrice,
+            type: 'veg'
+        },
+        {
+            id: '7',
+            title: 'Taco',
+            description: tacoDescription,
+            image: tacoImage,
+            price: tacoPrice,
+            type: 'veg'
+        },
+        {
+            id: '8',
+            title: 'Curry',
+            description: curryDescription,
+            image: curryImage,
+            price: curryPrice,
+            type: 'veg'
+        },
+        {
+            id: '9',
+            title: 'Dessert',
+            description: dessertDescription,
+            image: dessertImage,
+            price: dessertPrice,
+            type: 'veg'
+        },
+        {
+            id: '10',
+            title: 'Burger',
+            description: burger_description,
+            image: burgerImage,
+            price: burger_price,
+            type: 'non-veg'
+        },
+        {
+            id: '11',
+            title: 'Butter Chicken (Murgh Makhani)',
+            description: chicken_tikka_masala_description,
+            image: Chicken_tikka_image,
+            price: chicken_tikka_masala_price,
+            type: 'non-veg'
+        },
+        {
+            id: '12',
+            title: 'Rogan Josh (Lamb Curry)',
+            description: rogan_josh_description,
+            image: rogan_josh,
+            price: rogan_josh_price,
+            type: 'non-veg'
+        },
+        {
+            id: '13',
+            title: 'Chicken Biryani',
+            description: chicken_biryani_description,
+            image: chicken_biryani,
+            price: chicken_biryani_price,
+            type: 'non-veg'
+        },
+        {
+            id: '14',
+            title: 'Fish Curry (Meen Curry)',
+            description: fish_curry_description,
+            image: fish_curry,
+            price: fish_curry_price,
+            type: 'non-veg'
+        },
+        {
+            id: '15',
+            title: 'Tandoori Chicken',
+            description: tandoori_chicken_description,
+            image: tandoori_chicken,
+            price: tandoori_chicken_price,
+            type: 'non-veg'
+        },
+        {
+            id: '16',
+            title: 'Mutton Korma',
+            description: mutton_horma_description,
+            image: mutton_korma,
+            price: mutton_korma_price,
+            type: 'non-veg'
+        },
+        {
+            id: '17',
+            title: 'Goan Fish Curry',
+            description: goan_fish_curry_description,
+            image: goan_fish_curry,
+            price: goan_fish_curry_price,
+            type: 'non-veg'
+        },
+        {
+          id: '18',
+            title: 'Chicken Chettinad',
+            description: chicken_chettinad_description,
+            image: chicken_chettinad,
+            price: chicken_chettinad_price,
+            type: 'non-veg'
+        },
+        {
+            id: '19',
+            title: 'Hyderabadi Dum Biryani',
+            description: hyderabadi_dum_biryani_description,
+            image: hyderabadi_dum_biryani,
+            price: hyderabadi_dum_biryani_price,
+            type: 'non-veg'
+        },
+        {
+            id: '20',
+            title: 'Kerala Fish Fry',
+            description: kerala_fish_fry_description,
+            image: kerala_fish_fry,
+            price: kerala_fish_fry_price,
+            type: 'non-veg'
+        },
+    ];
+
     const handleSearchChange = (text: string) => {
         setSearchText(text);
     };
 
     useFocusEffect(React.useCallback(() => {
-            return () => {
-                setVegButtonPressed(false);
-                setNonVegButtonPressed(false);
-            };
-        }, []));
+        return () => {
+            setVegButtonPressed(false);
+            setNonVegButtonPressed(false);
+        };
+    }, []));
     useFocusEffect(React.useCallback(() => {
-            // Reset the searchText state variable when the screen comes into focus
-            setSearchText('');
-        }, []));
+        // Reset the searchText state variable when the screen comes into focus
+        setSearchText('');
+    }, []));
     useEffect(() => {
         if (!modalVisible) {
             setVegButtonPressed(false);
@@ -233,74 +434,83 @@ const HomeScreen = ({navigation}) => {
         }).start();
     }, []);
     useFocusEffect(React.useCallback(() => {
-            setSelectedOption('all');
-        }, []));
+        setSelectedOption('all');
+    }, []));
     useFocusEffect(React.useCallback(() => {
-            Animated.timing(animation, {
-                toValue: 0,
-                duration: 500,
-                easing: Easing.out(Easing.quad),
-                useNativeDriver: true
-            }).start();
-        }, []));
+        Animated.timing(animation, {
+            toValue: 0,
+            duration: 500,
+            easing: Easing.out(Easing.quad),
+            useNativeDriver: true
+        }).start();
+    }, []));
 
-  return (
-      <View style={styles.container}>
-          <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Image
-                  source={require('../../../android/app/src/main/res/mipmap-hdpi/ic_launcher.png')}
-                  style={{width: 50, height: 50, borderRadius: 10}}
-              />
-          </View>
-          <View style={styles.searchContainer}>
-              <Image
-                  source={require('../../assets/images/search_icon.png')}
-                  style={styles.iconStyle}
-                  tintColor='black'
-              />
-              <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Search for items..."
-                  onChangeText={handleSearchChange}
-                  value={searchText}
-              />
-          </View>
-    <ScrollView style={styles.container}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }>
-        <Animated.View style={{ transform: [{ translateX: animation }] }}>
-            {renderSortOption()}
+    return (
+        <View style={styles.container}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Image
+                    source={require('../../../android/app/src/main/res/mipmap-hdpi/ic_launcher.png')}
+                    style={{width: 50, height: 50, borderRadius: 10}}
+                />
+            </View>
+            <View style={styles.searchContainer}>
+                <Image
+                    source={require('../../assets/images/search_icon.png')}
+                    style={styles.iconStyle}
+                    tintColor='black'
+                />
+                <TextInput
+                    style={styles.inputStyle}
+                    placeholder="Search for items..."
+                    onChangeText={handleSearchChange}
+                    value={searchText}
+                />
+            </View>
+            <ScrollView style={styles.container}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }>
+                <Animated.View style={{ transform: [{ translateX: animation }] }}>
+                    {renderSortOption()}
 
-            {renderVegItem("Pizza", pizzaImage, pizza_description, pizza_price)}
-            {renderVegItem("Pasta", pastaImage, pastaDescription, pastaPrice)}
-            {renderVegItem("Salad", saladImage, saladDescription, saladPrice)}
-            {renderVegItem("Veg Burger", burgerImage, burgerDescription, burgerPrice)}
-            {renderVegItem("Sushi", sushiImage, sushiDescription, sushiPrice)}
-            {renderVegItem("Sandwich", sandwichImage, sandwichDescription, sandwichPrice)}
-            {renderVegItem("Soup", soupImage, soupDescription, soupPrice)}
-            {renderVegItem("Taco", tacoImage, tacoDescription, tacoPrice)}
-            {renderVegItem("Curry", curryImage, curryDescription, curryPrice)}
-            {renderVegItem("Dessert", dessertImage, dessertDescription, dessertPrice)}
+                    {sortedItems.map(item => {
+                        if (lowToHighButtonPressed) {
+                            return renderVegItem(item.title, item.image, item.description, item.price);
+                        } else {
+                            return renderNonVegItem(item.title, item.image, item.description, item.price);
+                        }
+                    })}
 
-            {renderNonVegItem("Burger", burgerImage, burger_description, burger_price)}
-            {renderNonVegItem("Butter Chicken (Murgh Makhani)", Chicken_tikka_image, chicken_tikka_masala_description, chicken_tikka_masala_price)}
-            {renderNonVegItem("Rogan Josh (Lamb Curry)", rogan_josh, rogan_josh_description, rogan_josh_price)}
-            {renderNonVegItem("Chicken Biryani", chicken_biryani, chicken_biryani_description, chicken_biryani_price)}
-            {renderNonVegItem("Fish Curry (Meen Curry)", fish_curry, fish_curry_description, fish_curry_price)}
-            {renderNonVegItem("Tandoori Chicken", tandoori_chicken, tandoori_chicken_description, tandoori_chicken_price)}
-            {renderNonVegItem("Mutton Korma", mutton_korma, mutton_horma_description, mutton_korma_price)}
-            {renderNonVegItem("Goan Fish Curry", goan_fish_curry, goan_fish_curry_description, goan_fish_curry_price)}
-            {renderNonVegItem("Chicken Chettinad", chicken_chettinad, chicken_chettinad_description, chicken_chettinad_price)}
-            {renderNonVegItem("Hyderabadi Dum Biryani", hyderabadi_dum_biryani, hyderabadi_dum_biryani_description, hyderabadi_dum_biryani_price)}
-            {renderNonVegItem("Kerala Fish Fry", kerala_fish_fry, kerala_fish_fry_description, kerala_fish_fry_price)}
-        </Animated.View>
-    </ScrollView>
-      </View>
-  );
+                    {sortedItems.length === 0 && renderVegItem("Pizza", pizzaImage, pizza_description, pizza_price)}
+                    {sortedItems.length === 0 && renderVegItem("Pasta", pastaImage, pastaDescription, pastaPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Salad", saladImage, saladDescription, saladPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Veg Burger", burgerImage, burgerDescription, burgerPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Sushi", sushiImage, sushiDescription, sushiPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Sandwich", sandwichImage, sandwichDescription, sandwichPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Soup", soupImage, soupDescription, soupPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Taco", tacoImage, tacoDescription, tacoPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Curry", curryImage, curryDescription, curryPrice)}
+                    {sortedItems.length === 0 && renderVegItem("Dessert", dessertImage, dessertDescription, dessertPrice)}
+
+                    {sortedItems.length === 0 && renderNonVegItem("Burger", burgerImage, burger_description, burger_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Butter Chicken (Murgh Makhani)", Chicken_tikka_image, chicken_tikka_masala_description, chicken_tikka_masala_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Rogan Josh (Lamb Curry)", rogan_josh, rogan_josh_description, rogan_josh_price)}
+                    {sortedItems.length === 0 &&renderNonVegItem("Chicken Biryani", chicken_biryani, chicken_biryani_description, chicken_biryani_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Fish Curry (Meen Curry)", fish_curry, fish_curry_description, fish_curry_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Tandoori Chicken", tandoori_chicken, tandoori_chicken_description, tandoori_chicken_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Mutton Korma", mutton_korma, mutton_horma_description, mutton_korma_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Goan Fish Curry", goan_fish_curry, goan_fish_curry_description, goan_fish_curry_price)}
+                    {sortedItems.length === 0 &&renderNonVegItem("Chicken Chettinad", chicken_chettinad, chicken_chettinad_description, chicken_chettinad_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Hyderabadi Dum Biryani", hyderabadi_dum_biryani, hyderabadi_dum_biryani_description, hyderabadi_dum_biryani_price)}
+                    {sortedItems.length === 0 && renderNonVegItem("Kerala Fish Fry", kerala_fish_fry, kerala_fish_fry_description, kerala_fish_fry_price)}
+
+                </Animated.View>
+            </ScrollView>
+        </View>
+    );
 };
 
 export default HomeScreen;
