@@ -24,8 +24,8 @@ type RootStackParamList = {
     AboutScreen: undefined;
 };
 
-type QuantityScreenRouteProp = RouteProp<RootStackParamList, 'QuantityScreen'>;
 
+type QuantityScreenRouteProp = RouteProp<RootStackParamList, 'QuantityScreen'>;
 type Props = {
     route: QuantityScreenRouteProp;
 };
@@ -60,7 +60,7 @@ const App = () => {
                     name="cart"
                     component={cartScreen}
                     options={{
-                        headerShown: false, // Hide the header
+                        headerShown: true, // Hide the header
                     }}
                 />
                 <Stack.Screen

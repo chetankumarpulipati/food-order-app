@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {View, Text, StyleSheet, Image, Pressable, Touchable, TouchableHighlight, ScrollView} from "react-native";
 import { RouteProp } from '@react-navigation/native';
-
+import {TouchableNativeFeedback} from "react-native-gesture-handler";
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import CartScreen from "../CartScreen";
 
 
 type RootStackParamList = {
@@ -65,6 +67,7 @@ const getAdditionalDescription = (itemTitle: string) => {
 
 const QuantityScreen: React.FC<Props> = ({ route }) => {
     // @ts-ignore
+    const navigation = useNavigation(); // Add this line to get the navigation prop
     const { itemTitle, imageSource, description, price } = route.params; // Remove additionalDescription from here
     const [qty, setQty] = useState(1); // Initialize quantity state
     const increaseQty = () => {
@@ -87,7 +90,14 @@ const QuantityScreen: React.FC<Props> = ({ route }) => {
             setQty(qty - 5); // Decrease quantity by 5
         }
     }
-    const [additionalDesc, setAdditionalDesc] = useState(''); // Initialize additional description state
+    const addToCart = () => {
+        navigation.navigate('cart', {
+            itemTitle: itemTitle,
+            price: price * qty,
+        });
+        console.log('Added',{qty},{itemTitle},'to cart');
+    }
+    const [additionalDesc, setAdditionalDesc] = useState('');
 
     useEffect(() => {
         setAdditionalDesc(getAdditionalDescription(itemTitle));
@@ -109,13 +119,13 @@ const QuantityScreen: React.FC<Props> = ({ route }) => {
                     <Text style={styles.price}>Quantity: {qty}</Text>
                 </View>
                 <View style={styles.choose_qty}>
-                    <Pressable onPress={decreaseQty} onLongPress={increaseQtyLongPress}><Text style={{fontSize: 50}}>-</Text></Pressable>
+                    <Pressable onPress={decreaseQty} onLongPress={decreaseQtyLongPress}><Text style={{fontSize: 50}}>-</Text></Pressable>
                     <Text style={{fontSize: 30}}>{qty}</Text>
-                    <Pressable onPress={increaseQty} onLongPress={decreaseQtyLongPress}><Text style={{fontSize: 30}}>+</Text></Pressable>
+                    <Pressable onPress={increaseQty} onLongPress={increaseQtyLongPress}><Text style={{fontSize: 30}}>+</Text></Pressable>
                 </View>
-                <TouchableHighlight>
+                <TouchableNativeFeedback onPress={addToCart}>
                     <Text style={styles.add_to_cart}>Add to Cart</Text>
-                </TouchableHighlight>
+                </TouchableNativeFeedback>
             </View>
         </ScrollView>
     );
@@ -126,6 +136,7 @@ export default QuantityScreen;
 const styles = StyleSheet.create({
     container: {
         marginTop: 50,
+        marginBottom: 50,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -164,11 +175,10 @@ const styles = StyleSheet.create({
     add_to_cart: {
         backgroundColor: 'blue',
         color: 'white',
-        padding: 10,
+        padding: 20,
         borderRadius: 10,
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 30,
     },
     pressable: {
         padding: 50,
