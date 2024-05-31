@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { RouteProp } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 type RootStackParamList = {
     CartScreen: {
@@ -17,10 +19,52 @@ interface Props {
     route: CartScreenRouteProp;
 }
 
-const CartScreen: React.FC<Props> = ({route}) => {
-    const { itemTitle, imageSource, price, qty } = route.params;
+//storage
+
+
+
+
+const CartScreen: React.FC<Props> = ({route},{navigation}) => {
+    // const { itemTitle, imageSource, price, qty } = route.params;
+    const { itemTitle, imageSource, price, qty } = route.params ? route.params : { itemTitle: '', imageSource: null, price: 0, qty: 0 };
+    const [cartItems, setCartItems] = useState([]);
     const [qtyy, setQty] = useState(1); // Initialize quantity state
     const temp_price = price * qtyy;
+
+    const storeData = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@cart', jsonValue)
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const addToCart = () => {
+        navigation.navigate('cart', {
+            itemTitle: itemTitle,
+            price: price * qtyy,
+            qty: qtyy,
+            imageSource: imageSource,
+        });
+        console.log('Added',{qtyy},{itemTitle},'to storage using async storage');
+        storeData({itemTitle: itemTitle, price: price * qtyy, qty: qtyy, imageSource: imageSource});
+    }
+    const getData = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@cart')
+            return jsonValue != null ? JSON.parse(jsonValue) : null;
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            const items = await getData();
+            setCartItems(items);
+        }
+        fetchCartItems();
+    }, []);
 
     const increaseQty = () => {
         setQty(qtyy + 1);
