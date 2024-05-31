@@ -48,6 +48,19 @@ const ProfileScreen = () => {
                 </View>
             </TouchableNativeFeedback>
             <TouchableNativeFeedback style={styles.frame}>
+                <View testID="My Account" style={styles.my_account_container}>
+                    <Image source={require('../../assets/images/cart.png')} style={{ width: 30, height: 30,  marginRight: 10, marginLeft: 10, tintColor: '#0601b4' }} />
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={{ fontFamily: 'DM Sans',fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>My Orders</Text>
+                        <Text>List all your orders</Text>
+                    </View>
+                    <Image
+                        source={require('../../assets/images/chevron_right.png')}
+                        style={{ width: 20, height: 20, tintColor: '#000', marginLeft: 'auto', marginRight: 10}}
+                    />
+                </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback style={styles.frame}>
                 <View testID="Touch ID" style={styles.my_account_container}>
                     <Image source={require('../../assets/images/lock.png')} style={{ width: 30, height: 30,  marginRight: 10, marginLeft: 10 }} />
                     <View style={{flexDirection: 'column', justifyContent: 'space-evenly' }}>

@@ -82,6 +82,280 @@ const chicken_chettinad_price = 28;
 const hyderabadi_dum_biryani_price = 30;
 const kerala_fish_fry_price = 32;
 
+
+const list_images = [
+    {
+        id: '1',
+        name: 'Pizza',
+        pizzaImage,
+    },
+    {
+        id: '2',
+        name: 'Pasta',
+        pastaImage,
+    },
+    {
+        id: '3',
+        name: 'salad',
+        saladImage,
+    },
+    {
+        id: '4',
+        name: 'Sushi',
+        sushiImage,
+    },
+    {
+        id: '5',
+        name: 'Sandwich',
+        sandwichImage,
+    },
+    {
+        id: '6',
+        name: 'Soup',
+        soupImage,
+    },
+    {
+        id: '7',
+        name: 'Taco',
+        tacoImage,
+    },
+    {
+        id: '8',
+        name: 'Curry',
+        curryImage,
+    },
+    {
+        id: '9',
+        name: 'Dessert',
+        dessertImage,
+    },
+    {
+        id: '10',
+        name: 'Burger',
+        burgerImage,
+    },
+    {
+        id: '11',
+        name: 'Butter Chicken (Murgh Makhani)',
+        Chicken_tikka_image,
+    },
+    {
+        id: '12',
+        name: 'Rogan Josh (Lamb Curry)',
+        rogan_josh,
+    },
+    {
+        id: '13',
+        name: 'Chicken Biryani',
+        chicken_biryani,
+    },
+    {
+        id: '14',
+        name: 'Fish Curry (Meen Curry)',
+        fish_curry,
+    },
+    {
+        id: '15',
+        name: 'Tandoori Chicken',
+        tandoori_chicken,
+    },
+    {
+        id: '16',
+        name: 'Mutton Korma',
+        mutton_korma,
+    },
+    {
+        id: '17',
+        name: 'Goan Fish Curry',
+        goan_fish_curry,
+    },
+    {
+        id: '18',
+        name: 'Chicken Chettinad',
+        chicken_chettinad,
+    },
+    {
+        id: '19',
+        name: 'Hyderabadi Dum Biryani',
+        hyderabadi_dum_biryani,
+    },
+    {
+        id: '20',
+        name: 'Kerala Fish Fry',
+        kerala_fish_fry,
+    },
+];
+const foodItems = [
+    {
+        id: '1',
+        title: 'Pizza',
+        description: pizza_description,
+        image: pizzaImage,
+        price: pizza_price,
+        type: 'veg'
+    },
+    {
+        id: '2',
+        title: 'Pasta',
+        description: pastaDescription,
+        image: pastaImage,
+        price: pastaPrice,
+        type: 'veg'
+    },
+    {
+        id: '3',
+        title: 'Salad',
+        description: saladDescription,
+        image: saladImage,
+        price: saladPrice,
+        type: 'veg'
+    },
+    {
+        id: '4',
+        title: 'Sushi',
+        description: sushiDescription,
+        image: sushiImage,
+        price: sushiPrice,
+        type: 'veg'
+    },
+    {
+        id: '5',
+        title: 'Sandwich',
+        description: sandwichDescription,
+        image: sandwichImage,
+        price: sandwichPrice,
+        type: 'veg'
+    },
+    {
+        id: '6',
+        title: 'Soup',
+        description: soupDescription,
+        image: soupImage,
+        price: soupPrice,
+        type: 'veg'
+    },
+    {
+        id: '7',
+        title: 'Taco',
+        description: tacoDescription,
+        image: tacoImage,
+        price: tacoPrice,
+        type: 'veg'
+    },
+    {
+        id: '8',
+        title: 'Curry',
+        description: curryDescription,
+        image: curryImage,
+        price: curryPrice,
+        type: 'veg'
+    },
+    {
+        id: '9',
+        title: 'Dessert',
+        description: dessertDescription,
+        image: dessertImage,
+        price: dessertPrice,
+        type: 'veg'
+    },
+    {
+        id: '10',
+        title: 'Burger',
+        description: burger_description,
+        image: burgerImage,
+        price: burger_price,
+        type: 'non-veg'
+    },
+    {
+        id: '11',
+        title: 'Butter Chicken (Murgh Makhani)',
+        description: chicken_tikka_masala_description,
+        image: Chicken_tikka_image,
+        price: chicken_tikka_masala_price,
+        type: 'non-veg'
+    },
+    {
+        id: '12',
+        title: 'Rogan Josh (Lamb Curry)',
+        description: rogan_josh_description,
+        image: rogan_josh,
+        price: rogan_josh_price,
+        type: 'non-veg'
+    },
+    {
+        id: '13',
+        title: 'Chicken Biryani',
+        description: chicken_biryani_description,
+        image: chicken_biryani,
+        price: chicken_biryani_price,
+        type: 'non-veg'
+    },
+    {
+        id: '14',
+        title: 'Fish Curry (Meen Curry)',
+        description: fish_curry_description,
+        image: fish_curry,
+        price: fish_curry_price,
+        type: 'non-veg'
+    },
+    {
+        id: '15',
+        title: 'Tandoori Chicken',
+        description: tandoori_chicken_description,
+        image: tandoori_chicken,
+        price: tandoori_chicken_price,
+        type: 'non-veg'
+    },
+    {
+        id: '16',
+        title: 'Mutton Korma',
+        description: mutton_horma_description,
+        image: mutton_korma,
+        price: mutton_korma_price,
+        type: 'non-veg'
+    },
+    {
+        id: '17',
+        title: 'Goan Fish Curry',
+        description: goan_fish_curry_description,
+        image: goan_fish_curry,
+        price: goan_fish_curry_price,
+        type: 'non-veg'
+    },
+    {
+        id: '18',
+        title: 'Chicken Chettinad',
+        description: chicken_chettinad_description,
+        image: chicken_chettinad,
+        price: chicken_chettinad_price,
+        type: 'non-veg'
+    },
+    {
+        id: '19',
+        title: 'Hyderabadi Dum Biryani',
+        description: hyderabadi_dum_biryani_description,
+        image: hyderabadi_dum_biryani,
+        price: hyderabadi_dum_biryani_price,
+        type: 'non-veg'
+    },
+    {
+        id: '20',
+        title: 'Kerala Fish Fry',
+        description: kerala_fish_fry_description,
+        image: kerala_fish_fry,
+        price: kerala_fish_fry_price,
+        type: 'non-veg'
+    },
+];
+const additional_description =[
+    {
+        id: '1',
+        title: 'Pizza',
+        additionalDescription: "hi pizza",
+    }
+]
+
+
 // @ts-ignore
 const HomeScreen = ({navigation}) => {
     const [sortedItems, setSortedItems] = useState([]);
@@ -109,14 +383,15 @@ const HomeScreen = ({navigation}) => {
             useNativeDriver: true
         }).start();
         setLoaded(true);
-    }, []);    const renderVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
+    }, []);
+    const renderVegItem = (itemTitle: string, imageSource: any, description: string, price: number) => {
         if ((selectedOption === 'veg' || selectedOption === 'all') && itemTitle.toLowerCase().includes(searchText.toLowerCase())) {
             if (sortedItems.length > 0 && !sortedItems.some(item => item.title === itemTitle)) {
                 return null;
             }            return (
                 <TouchableNativeFeedback
                     testID={itemTitle}
-                    onPress={() => navigation.navigate('QuantityScreen', {itemTitle, description, price})}
+                    onPress={() => navigation.navigate('QuantityScreen', {itemTitle,imageSource, description, price})}
                     style={styles.design}>
                     <Image
                         source={imageSource}
@@ -242,168 +517,7 @@ const HomeScreen = ({navigation}) => {
         });
         return sortedItems || [];
     };
-    const foodItems = [
-        {
-            id: '1',
-            title: 'Pizza',
-            description: pizza_description,
-            image: pizzaImage,
-            price: pizza_price,
-            type: 'veg'
-        },
-        {
-            id: '2',
-            title: 'Pasta',
-            description: pastaDescription,
-            image: pastaImage,
-            price: pastaPrice,
-            type: 'veg'
-        },
-        {
-            id: '3',
-            title: 'Salad',
-            description: saladDescription,
-            image: saladImage,
-            price: saladPrice,
-            type: 'veg'
-        },
-        {
-            id: '4',
-            title: 'Sushi',
-            description: sushiDescription,
-            image: sushiImage,
-            price: sushiPrice,
-            type: 'veg'
-        },
-        {
-            id: '5',
-            title: 'Sandwich',
-            description: sandwichDescription,
-            image: sandwichImage,
-            price: sandwichPrice,
-            type: 'veg'
-        },
-        {
-            id: '6',
-            title: 'Soup',
-            description: soupDescription,
-            image: soupImage,
-            price: soupPrice,
-            type: 'veg'
-        },
-        {
-            id: '7',
-            title: 'Taco',
-            description: tacoDescription,
-            image: tacoImage,
-            price: tacoPrice,
-            type: 'veg'
-        },
-        {
-            id: '8',
-            title: 'Curry',
-            description: curryDescription,
-            image: curryImage,
-            price: curryPrice,
-            type: 'veg'
-        },
-        {
-            id: '9',
-            title: 'Dessert',
-            description: dessertDescription,
-            image: dessertImage,
-            price: dessertPrice,
-            type: 'veg'
-        },
-        {
-            id: '10',
-            title: 'Burger',
-            description: burger_description,
-            image: burgerImage,
-            price: burger_price,
-            type: 'non-veg'
-        },
-        {
-            id: '11',
-            title: 'Butter Chicken (Murgh Makhani)',
-            description: chicken_tikka_masala_description,
-            image: Chicken_tikka_image,
-            price: chicken_tikka_masala_price,
-            type: 'non-veg'
-        },
-        {
-            id: '12',
-            title: 'Rogan Josh (Lamb Curry)',
-            description: rogan_josh_description,
-            image: rogan_josh,
-            price: rogan_josh_price,
-            type: 'non-veg'
-        },
-        {
-            id: '13',
-            title: 'Chicken Biryani',
-            description: chicken_biryani_description,
-            image: chicken_biryani,
-            price: chicken_biryani_price,
-            type: 'non-veg'
-        },
-        {
-            id: '14',
-            title: 'Fish Curry (Meen Curry)',
-            description: fish_curry_description,
-            image: fish_curry,
-            price: fish_curry_price,
-            type: 'non-veg'
-        },
-        {
-            id: '15',
-            title: 'Tandoori Chicken',
-            description: tandoori_chicken_description,
-            image: tandoori_chicken,
-            price: tandoori_chicken_price,
-            type: 'non-veg'
-        },
-        {
-            id: '16',
-            title: 'Mutton Korma',
-            description: mutton_horma_description,
-            image: mutton_korma,
-            price: mutton_korma_price,
-            type: 'non-veg'
-        },
-        {
-            id: '17',
-            title: 'Goan Fish Curry',
-            description: goan_fish_curry_description,
-            image: goan_fish_curry,
-            price: goan_fish_curry_price,
-            type: 'non-veg'
-        },
-        {
-          id: '18',
-            title: 'Chicken Chettinad',
-            description: chicken_chettinad_description,
-            image: chicken_chettinad,
-            price: chicken_chettinad_price,
-            type: 'non-veg'
-        },
-        {
-            id: '19',
-            title: 'Hyderabadi Dum Biryani',
-            description: hyderabadi_dum_biryani_description,
-            image: hyderabadi_dum_biryani,
-            price: hyderabadi_dum_biryani_price,
-            type: 'non-veg'
-        },
-        {
-            id: '20',
-            title: 'Kerala Fish Fry',
-            description: kerala_fish_fry_description,
-            image: kerala_fish_fry,
-            price: kerala_fish_fry_price,
-            type: 'non-veg'
-        },
-    ];
+
 
     const handleSearchChange = (text: string) => {
         setSearchText(text);
