@@ -94,6 +94,8 @@ const QuantityScreen: React.FC<Props> = ({ route }) => {
         navigation.navigate('cart', {
             itemTitle: itemTitle,
             price: price * qty,
+            qty: qty,
+            imageSource: imageSource,
         });
         console.log('Added',{qty},{itemTitle},'to cart');
     }
