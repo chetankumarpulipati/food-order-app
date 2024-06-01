@@ -4,6 +4,7 @@ import { RouteProp } from '@react-navigation/native';
 import {TouchableNativeFeedback} from "react-native-gesture-handler";
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 import CartScreen from "../CartScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 type RootStackParamList = {
@@ -90,6 +91,17 @@ const QuantityScreen: React.FC<Props> = ({ route }) => {
             setQty(qty - 5); // Decrease quantity by 5
         }
     }
+    const [additionalDesc, setAdditionalDesc] = useState('');
+    const getData = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@cart');
+            const data = jsonValue != null ? JSON.parse(jsonValue) : [];
+            console.log('Retrieved data:', data);
+            return data;
+        } catch(e) {
+            console.log(e);
+        }
+    }
     const addToCart = () => {
         navigation.navigate('cart', {
             itemTitle: itemTitle,
@@ -97,9 +109,21 @@ const QuantityScreen: React.FC<Props> = ({ route }) => {
             qty: qty,
             imageSource: imageSource,
         });
-        console.log('Added',{qty},{itemTitle},'to cart');
+        console.log('Added',{qty},{itemTitle},'to storage using async storage');
+        storeData({itemTitle: itemTitle, price: price * qty, qty: qty, imageSource: imageSource});
     }
-    const [additionalDesc, setAdditionalDesc] = useState('');
+    const storeData = async (value) => {
+        try {
+            const existingCartData = await getData();
+            const updatedCartData = existingCartData.some(item => item.itemTitle === value.itemTitle)
+                ? existingCartData.map(item => item.itemTitle === value.itemTitle ? value : item)
+                : [...existingCartData, value];
+            const jsonValue = JSON.stringify(updatedCartData);
+            await AsyncStorage.setItem('@cart', jsonValue);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     useEffect(() => {
         setAdditionalDesc(getAdditionalDescription(itemTitle));

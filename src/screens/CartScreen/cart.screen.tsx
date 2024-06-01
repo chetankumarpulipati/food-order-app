@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useIsFocused } from '@react-navigation/native';
+import QuantityScreen from "../QuantityScreen";
 
 type RootStackParamList = {
     CartScreen: {
@@ -19,44 +20,54 @@ interface Props {
     route: CartScreenRouteProp;
 }
 
-//storage
 
-
-
+interface CartItem {
+    itemTitle: string;
+    imageSource: any;
+    price: number;
+    qty: number;
+}
 
 const CartScreen: React.FC<Props> = ({route},{navigation}) => {
-    // const { itemTitle, imageSource, price, qty } = route.params;
-    const { itemTitle, imageSource, price, qty } = route.params ? route.params : { itemTitle: '', imageSource: null, price: 0, qty: 0 };
-    const [cartItems, setCartItems] = useState([]);
+    const { itemTitle, imageSource, price, qty } = route.params
+        ? route.params
+        : { itemTitle: '', imageSource: null, price: 0, qty: 0 };
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [qtyy, setQty] = useState(1); // Initialize quantity state
     const temp_price = price * qtyy;
-
-    const storeData = async (value) => {
-        try {
-            const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem('@cart', jsonValue)
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    const addToCart = () => {
-        navigation.navigate('cart', {
-            itemTitle: itemTitle,
-            price: price * qtyy,
-            qty: qtyy,
-            imageSource: imageSource,
-        });
-        console.log('Added',{qtyy},{itemTitle},'to storage using async storage');
-        storeData({itemTitle: itemTitle, price: price * qtyy, qty: qtyy, imageSource: imageSource});
-    }
+    const isFocused = useIsFocused();
+    const [refreshing, setRefreshing] = useState(false);
     const getData = async () => {
         try {
-            const jsonValue = await AsyncStorage.getItem('@cart')
-            return jsonValue != null ? JSON.parse(jsonValue) : null;
+            const jsonValue = await AsyncStorage.getItem('@cart');
+            return jsonValue != null ? JSON.parse(jsonValue) : [];
         } catch(e) {
             console.log(e);
         }
     }
+    const fetchCartItems = async () => {
+        const items = await getData();
+        setCartItems(items);
+    }
+    const increaseQty = (index) => {
+        setCartItems(prevCartItems => prevCartItems.map((item, i) =>
+            i === index ? {...item, qty: item.qty + 1, price: item.price * (item.qty + 1)} : item
+        ));
+    }
+    const decreaseQty = (index) => {
+        setCartItems(prevCartItems => prevCartItems.map((item, i) =>
+            i === index && item.qty > 1 ? {...item, qty: item.qty - 1, price: (item.price / item.qty) * (item.qty - 1)} : item
+        ));
+    }
+    const deleteItem = (index) => {
+        setCartItems(prevCartItems => prevCartItems.filter((item, i) => i !== index));
+    }
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchCartItems().then(() => setRefreshing(false));
+    }, []);
+    const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
+
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -65,51 +76,61 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
         }
         fetchCartItems();
     }, []);
-
-    const increaseQty = () => {
-        setQty(qtyy + 1);
-    }
-    const decreaseQty = () => {
-        if (qty > 1) {
-            setQty(qtyy - 1);
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            const items = await getData();
+            setCartItems(items);
         }
-    }
-    const deleteItem = () => {
-        console.log('Deleted', {qty}, {itemTitle}, 'from cart');
-    }
+        fetchCartItems();
+    }, [isFocused]);
+    useEffect(() => {
+        fetchCartItems();
+    }, [isFocused]);
 
-    console.log('Image Source:', imageSource);
+    // console.log('Image Source:', imageSource);
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <View style={styles.item_view}>
-                    <Image
-                        source = {imageSource}
-                        style = {styles.image}
-                    />
-                    <View style={styles.details}>
-                        <Text style={styles.itemTitle}>{itemTitle}</Text>
-                        <Text style={styles.qty}>quantity: {qtyy}</Text>
-                        <Text style={styles.price}>price: {temp_price} </Text>
-                    </View>
-                    <View style={styles.actions}>
-                        <View style={styles.qtyButtons}>
-                            <TouchableOpacity onPress={increaseQty} style={styles.qtyButton}>
-                                <Text style={styles.qtyButtonText}>+</Text>
-                            </TouchableOpacity>
-                            <Text style={styles.qty}>{qtyy}</Text>
-                            <TouchableOpacity onPress={decreaseQty} style={styles.qtyButton}>
-                                <Text style={styles.qtyButtonText}>-</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity onPress={deleteItem} style={styles.deleteButton}>
+        <ScrollView
+            contentContainerStyle={{flexGrow: 1}}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        >
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={styles.totalPrice}>Total Price: ₹{totalPrice}</Text>
+                {cartItems.length === 0 ? (
+                    <Text>No items added to cart</Text>
+                ) : (
+                    cartItems.map((item, index) => (
+                        <View style={styles.item_view}>
                             <Image
-                                source = {require('../../assets/images/bin.png')}
-                                style = {{width: 30, height: 30}}
+                                source = {item.imageSource}
+                                style = {styles.image}
                             />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                            <View style={styles.details}>
+                                <Text style={styles.itemTitle}>{item.itemTitle}</Text>
+                                <Text style={styles.qty}>quantity: {item.qty}</Text>
+                                <Text style={styles.price}>price: {item.price} </Text>
+                            </View>
+                            <View style={styles.actions}>
+                                <View style={styles.qtyButtons}>
+                                    <TouchableOpacity onPress={() => increaseQty(index)} style={styles.qtyButton}>
+                                        <Text style={styles.qtyButtonText}>+</Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.qty}>{item.qty}</Text>
+                                    <TouchableOpacity onPress={() => decreaseQty(index)} style={styles.qtyButton}>
+                                        <Text style={styles.qtyButtonText}>-</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <TouchableOpacity onPress={() => deleteItem(index)} style={styles.deleteButton}>
+                                    <Image
+                                        source = {require('../../assets/images/bin.png')}
+                                        style = {{width: 30, height: 30}}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    ))
+                )}
             </View>
         </ScrollView>
     )
@@ -191,5 +212,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    totalPrice: {
+        fontSize: 20,
+        fontWeight: "bold",
+        margin: 10,
     },
 });
