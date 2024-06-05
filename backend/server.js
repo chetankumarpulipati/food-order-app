@@ -1,43 +1,50 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const connectDB = require('./db'); // Import your database connection
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
+mongoose.connect("mongodb+srv://chetankumarpulipati4:ULR0bshMkM5o8e39@fooddelivery.sygo0ur.mongodb.net/?retryWrites=true&w=majority&appName=foodDelivery", {
+}).then(() => {
+    console.log("Connected to MongoDB Atlas");
+}).catch((error) => {
+    console.error("Error connecting to MongoDB Atlas", error);
+});
 
-// Enable CORS (if needed for your frontend)
+// Define the Order schema
+const OrderSchema = new mongoose.Schema({
+  itemName: String,
+  itemPrice: Number,
+  quantity: Number,
+});
+
+const Order = mongoose.model('Order', OrderSchema);
+
 app.use(cors());
 
-// Parse incoming request body data
 app.use(bodyParser.json());
 
-const Order = require('./order'); // Import your Order model
+app.post('/test/orders', async (req, res) => {
+  const { itemName, itemPrice, quantity } = req.body;
 
-// API endpoint to handle order placement
-app.post('/api/orders', async (req, res) => {
-  const { userId, restaurantId, items, totalPrice, deliveryAddress } = req.body;
+  const order = new Order({
+    itemName,
+    itemPrice,
+    quantity,
+  });
 
   try {
-    const newOrder = new Order({
-      userId,
-      restaurantId,
-      items,
-      totalPrice,
-      deliveryAddress,
-    });
-
-    const savedOrder = await newOrder.save();
-
-    res.json({ message: 'Order placed successfully!', order: savedOrder });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error placing order' });
+    await order.save();
+    res.send(order);
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+app.get('/',async (req, res) => { 
+  res.send('Server Status: Ok!');
+});
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});

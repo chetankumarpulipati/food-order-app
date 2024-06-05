@@ -1,18 +1,11 @@
 import React, {useEffect, useState} from 'react';
-<<<<<<< HEAD
 import {Image, RefreshControl, ScrollView, StyleSheet,Alert, Text, TouchableOpacity, View} from "react-native";
-=======
-import {Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
->>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 import { RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import QuantityScreen from "../QuantityScreen";
-<<<<<<< HEAD
 import { Button } from 'react-native';
 import axios from 'axios';
-=======
->>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 
 type RootStackParamList = {
     CartScreen: {
@@ -42,11 +35,11 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
         ? route.params
         : { itemTitle: '', imageSource: null, price: 0, qty: 0 };
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [qtyy, setQty] = useState(1); // Initialize quantity state
+    const [qtyy, setQty] = useState(1);
     const temp_price = price * qtyy;
     const isFocused = useIsFocused();
     const [refreshing, setRefreshing] = useState(false);
-    const [orderPlaced, setOrderPlaced] = useState(false);
+    const [items, setItems] = useState([]);
 
     const getData = async () => {
         try {
@@ -74,29 +67,41 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
         setCartItems(prevCartItems => prevCartItems.filter((item, i) => i !== index));
     }
     const onRefresh = React.useCallback(() => {
+        console.log('Cart Items:', cartItems);
         setRefreshing(true);
         fetchCartItems().then(() => setRefreshing(false));
-    }, []);
+    }, [cartItems]);
     const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
-<<<<<<< HEAD
     const handlePlaceOrder = async () => {
-        const orderDetails = {
-          // ... gather order details from user selections
-        };
+        const orderDetails = cartItems.map(item => {
+          console.log('Item Name:', item.itemTitle);
+          console.log('Item Price:', item.price);
+          console.log('Item Quantity:', item.qty);
+      
+          return {
+            itemName: item.itemTitle,
+            itemPrice: item.price,
+            quantity: item.qty,
+          };
+        });
       
         try {
-          const response = await axios.post('http://localhost:5000/api/orders', orderDetails);
-          console.log('Order placed:', response.data);
-          // Show success message to the user
+            Alert.alert('Order Placed', 'Your order has been placed successfully', [
+                { text: 'OK', onPress: () => console.log('Ok Pressed') }
+            ]);
+            const response = await axios.post('http://10.0.2.2:3000/orders', orderDetails);
+        
+            if (response.status !== 200) {
+                console.error('HTTP error', response.status);
+                return;
+            }
+        
+            const data = response.data;
+            console.log('Order placed:', JSON.stringify(data, null, 2));
         } catch (error) {
-          console.error(error);
-          // Show error message to the user
+            console.error('Fetch error:', error);
         }
       };
-    
-=======
-
->>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -130,7 +135,7 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
                     <Text>No items added to cart</Text>
                 ) : (
                     cartItems.map((item, index) => (
-                        <View style={styles.item_view}>
+                        <View style={styles.item_view} key={index}>
                             <Image
                                 source = {item.imageSource}
                                 style = {styles.image}
@@ -160,17 +165,10 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
                         </View>
                     ))
                 )}
-<<<<<<< HEAD
             <Button title="Place Order" onPress={handlePlaceOrder} />
             </View>
         </ScrollView>
     )}
-=======
-            </View>
-        </ScrollView>
-    )
-}
->>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 
 export default CartScreen;
 
