@@ -1,11 +1,18 @@
 import React, {useEffect, useState} from 'react';
+<<<<<<< HEAD
 import {Image, RefreshControl, ScrollView, StyleSheet,Alert, Text, TouchableOpacity, View} from "react-native";
+=======
+import {Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+>>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 import { RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import QuantityScreen from "../QuantityScreen";
+<<<<<<< HEAD
 import { Button } from 'react-native';
 import axios from 'axios';
+=======
+>>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 
 type RootStackParamList = {
     CartScreen: {
@@ -71,6 +78,7 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
         fetchCartItems().then(() => setRefreshing(false));
     }, []);
     const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
+<<<<<<< HEAD
     const handlePlaceOrder = async () => {
         const orderDetails = {
           // ... gather order details from user selections
@@ -86,6 +94,9 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
         }
       };
     
+=======
+
+>>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -149,10 +160,17 @@ const CartScreen: React.FC<Props> = ({route},{navigation}) => {
                         </View>
                     ))
                 )}
+<<<<<<< HEAD
             <Button title="Place Order" onPress={handlePlaceOrder} />
             </View>
         </ScrollView>
     )}
+=======
+            </View>
+        </ScrollView>
+    )
+}
+>>>>>>> 869b4a2fbe580eb5968eb799a3912bdac1ea44d7
 
 export default CartScreen;
 
