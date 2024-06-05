@@ -93,7 +93,7 @@
     </div>
     </ul>
     <h2>Screenshots</h2>
-    <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160648_foodorder.jpg" width="300" height="300"></br>
+    <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160648_foodorder.jpg" width="300" height="500"></br>
     <br><img alt="App Screenshot" src="./src//screenshots/Screenshot_20240605_160652_foodorder.jpg"></br>
     <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160702_foodorder.jpg"></br>
     <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160708_foodorder.jpg"></br>
