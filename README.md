@@ -93,12 +93,12 @@
     </div>
     </ul>
     <h2>Screenshots</h2>
-    <br><img alt="App Screenshot" src=""></br>
-    <br><img alt="App Screenshot" src=""></br>
-    <br><img alt="App Screenshot" src=""></br>
-    <br><img alt="App Screenshot" src=""></br>
-    <br><img alt="App Screenshot" src=""></br>
-    <br><img alt="App Screenshot" src=""></br>
+    <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160648_foodorder.jpg"></br>
+    <br><img alt="App Screenshot" src="./src//screenshots/Screenshot_20240605_160652_foodorder.jpg"></br>
+    <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160702_foodorder.jpg"></br>
+    <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160708_foodorder.jpg"></br>
+    <br><img alt="App Screenshot" src="./src/screenshots/Screenshot_20240605_160712_foodorder.jpg"></br>
+    <br><img alt="App Screenshot" src="./src//screenshots/Screenshot_20240605_160826_foodorder.jpg"></br>
 </p>
 <h2>Authors</h2>
 <p>&bull;&nbsp;<a href="https://www.linkedin.com/in/chetan-kumar-b4388926b/" target="_blank">Chetan Kumar Pulipati</a></p>
